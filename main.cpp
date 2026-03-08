@@ -56,6 +56,7 @@ int NextCourseId=0;
 
 int StudentCounter=0;
 int CourseCounter=0;
+int AdminCounter=0;
 int StudentCourseCounter=0;
 
 
@@ -184,7 +185,12 @@ void ChangeGrade(int student_id , int course_id)
 // needs to take the current student id   by reference and assign it to CurrentStudentId variable 
 int LoginStudent(int current_student_id)
 {
-    
+    bool exists = IsStudentExists(current_student_id);
+    if (exists == true) 
+        return current_student_id;
+    else 
+        return -1;
+
 }
 
 
@@ -220,7 +226,7 @@ void ViewGrade(int current_student_id,int course_id)
 }
 #pragma endregion
 
-#pragma region system_functions
+#pragma region system_functions // DONE
 
 // TODO: read students from students.txt and increase the StudentCounter 
 void LoadStudents()
@@ -228,7 +234,7 @@ void LoadStudents()
     ifstream file("students.txt");
     if (!file.is_open())
     {
-        cout<<"file could not be opened"<<endl;
+        cout<<"file students.txt could not be opened"<<endl;
         return;
     }
     Student student;
@@ -243,10 +249,10 @@ void LoadStudents()
 // TODO: save students to students.txt
 void SaveStudents()
 {
-    ofstream file("student.txt");
+    ofstream file("students.txt");
     if (!file.is_open())
     {
-        cout<<"file could not be opened"<<endl;
+        cout<<"file students.txt could not be opened"<<endl;
         return;
     }
     for (int i = 0 ; i < StudentCounter ; i++)
@@ -264,37 +270,124 @@ void SaveStudents()
 // TODO: read courses from courses.txt and increase the CourseCounter 
 void LoadCourses()
 {
+    ifstream file("courses.txt");
+    if (!file.is_open())
+    {
+        cout<<"file courses.txt could not be opened"<<endl;
+        return;
+    }
+    Course course;
+    while (file>>course.CourseId>>course.Name>>course.InstructorName>>course.CreditHours
+           >>course.MaxCapacity>>course.CurrentEnrolled>>course.Day>>course.Time)
+    {
+        CourseArray[CourseCounter] = course;
+        CourseCounter++;
+    }
+    file.close();
 }
 
 // TODO: save courses to courses.txt 
 void SaveCourses()
 {
+    ofstream file("courses.txt");
+    if (!file.is_open())
+    {
+        cout<<"file courses.txt could not be opened"<<endl;
+        return;
+    }
+    for (int i = 0 ; i < CourseCounter ; i++)
+    {
+        file << CourseArray[i].CourseId << " "
+             << CourseArray[i].Name << " "
+             << CourseArray[i].InstructorName << " "
+             << CourseArray[i].CreditHours << " "
+             << CourseArray[i].MaxCapacity << " "
+             << CourseArray[i].CurrentEnrolled << " "
+             << CourseArray[i].Day << " "
+             << CourseArray[i].Time << " "
+             << endl;
+    }
+    file.close();
 }
 
 // TODO: read admins from admins.txt and increase the AdminCounter 
 void LoadAdmins()
 {
+    ifstream file("admins.txt");
+    if (!file.is_open())
+    {
+        cout<<"file admins.txt could not be opened"<<endl;
+        return;
+    }
+    Admin admin;
+    while (file>>admin.AdminId>>admin.Name>>admin.Password)
+    {
+        AdminArray[AdminCounter]=admin;
+        AdminCounter++;
+    }
+    file.close();
 }
 
 // TODO: save admins to admins.txt 
 void SaveAdmins()
 {
+    ofstream file("admins.txt");
+    if (!file.is_open())
+    {
+        cout<<"file admins.txt could not be opened"<<endl;
+        return;
+    }
+    for (int i = 0 ; i < AdminCounter ; i++)
+    {
+        file << AdminArray[i].AdminId << " "
+             << AdminArray[i].Name << " "
+             << AdminArray[i].Password << " "
+             << endl;
+    }
+    file.close();
 }
 
 // TODO: read StudentCourse from studentcourses.txt and increase the StudentCourseCounter 
 void LoadStudentCourse()
 {
+    ifstream file("studentcourses.txt");
+    if (!file.is_open())
+    {
+        cout<<"file studentcourses.txt could not be opened"<<endl;
+        return;
+    }
+    StudentCourse student_course;
+    while (file>>student_course.StudentId>>student_course.CourseId>>student_course.Grade)
+    {
+        StudentCourseArray[StudentCourseCounter]=student_course;
+        StudentCourseCounter++;
+    }
+    file.close();
 }
 
 // TODO: save StudentCourse from studentcourses.txt 
 void SaveStudentCourse()
 {
+    ofstream file("studentcourses.txt");
+    if (!file.is_open())
+    {
+        cout<<"file studentcourses.txt could not be opened"<<endl;
+        return;
+    }
+    for (int i = 0 ; i < StudentCourseCounter ; i++)
+    {
+        file << StudentCourseArray[i].StudentId << " "
+             << StudentCourseArray[i].CourseId << " "
+             << StudentCourseArray[i].Grade << " "
+             << endl;
+    }
+    file.close();
 }
 
 
 #pragma endregion
 
-#pragma region helper_functions
+#pragma region helper_functions // DONE
 
 // Ask for user chios
 int GetUserChios()
@@ -318,40 +411,102 @@ int GetCourseId()
 // TODO: return index of student in StudentArray by ID
 int FindStudentIndexById(int student_id)
 {
+    for (int i = 0 ; i < StudentCounter ; i++)
+    {
+        if (StudentArray[i].StudentId == student_id) return i;
+    }
+    return -1;
 }
 
 // TODO: return index of course in CourseArray by ID
 int FindCourseIndexById(int course_id)
 {
+    for (int i = 0 ; i < CourseCounter ; i++)
+    {
+        if (CourseArray[i].CourseId == course_id) return i;
+    }
+    return -1;
 }
 
 // TODO: return index of admin in AdminArray by ID
 int FindAdminIndexById(int admin_id)
 {
+    for (int i = 0 ; i < AdminCounter ; i++)
+    {
+        if (AdminArray[i].AdminId == admin_id) return i;
+    }
+    return -1;
 }
 
 // TODO: return index of student course in StudentCourseArray by ID
-int FindStudentCourse(int student_id, int course_id)
+int FindStudentCourseIndexById(int student_id, int course_id)
 {
+    for (int i = 0 ; i < StudentCourseCounter ; i++)
+    {
+        if (StudentCourseArray[i].StudentId == student_id && StudentCourseArray[i].CourseId == course_id) return i;
+    }
+    return -1;
 }
 
 // TODO: check if student already registered in a course
 bool IsStudentEnrolled(int student_id, int course_id)
 {
+    for (int i = 0 ; i < StudentCourseCounter; i++)
+    {
+        if (StudentCourseArray[i].StudentId == student_id && StudentCourseArray[i].CourseId == course_id)
+            return true;
+    }
+    return false;
 }
 
 // TODO: check if course reached max capacity
-bool IsCourseFull(int course_index)
+bool IsCourseFull(int course_id)
 {
+    int index = FindCourseIndexById(course_id);
+    if (CourseArray[index].CurrentEnrolled < CourseArray[index].MaxCapacity)
+        return true;
+    else 
+        return false;
 }
 // TODO: loop over the student array to find the student with the given id
 bool IsStudentExists(int student_id)
 {
+    int index = FindStudentIndexById(student_id);
+    if (index == -1) 
+        return false;
+    else 
+        return true;
 
 }
-bool IsAdminExists(int student_id)
+bool IsAdminExists(int admin_id)
 {
+    int index = FindAdminIndexById(admin_id);
+    if (index == -1) 
+        return false;
+    else
+        return true;
+}
 
+// set the global variable NextStudentId to the biggest (id in the StudentArray + 1)
+void SetNextStudentId()
+{
+    int TempBiggestStudentId = 0;
+    for (int i = 0 ; i < StudentCounter ; i++)
+    {
+        if (StudentArray[i].StudentId > TempBiggestStudentId) TempBiggestStudentId = StudentArray[i].StudentId;
+    }
+    NextStudentId=TempBiggestStudentId + 1;
+}
+
+// set the global variable NextCourseId to the biggest (id in the CourseArray + 1)
+void SetNextCourseId()
+{
+    int TempBiggestCourseId = 0;
+    for (int i = 0 ; i < CourseCounter ; i++)
+    {
+        if (CourseArray[i].CourseId > TempBiggestCourseId) TempBiggestCourseId = CourseArray[i].CourseId;
+    }
+    NextStudentId=TempBiggestCourseId + 1;
 }
 
 // TODO: generate next student ID and increase it after using it
