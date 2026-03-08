@@ -42,6 +42,7 @@ struct StudentCourse
 };
 #pragma endregion
 
+
 #pragma region Global Variables and Arrays
 
 // ======== Arrays =========
