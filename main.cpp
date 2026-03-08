@@ -12,7 +12,7 @@ struct Student
     string Name;
     string Password;
     int level;
-    int NumberOfRegisteredCourses;
+    int NumberOfRegisteredCourses=0;
 };
 
 struct Course
@@ -42,7 +42,6 @@ struct StudentCourse
 };
 #pragma endregion
 
-
 #pragma region Global Variables and Arrays
 
 // ======== Arrays =========
@@ -65,14 +64,71 @@ int CurrentCourseId=0;
 
 #pragma endregion
 
+#pragma region masseges_functions
+
+void ShowMainMenu()
+{
+    system("clear");
+    cout << "===== Main Menu ====="<<endl;
+    cout<<"Write 1 To Enter Student Menu"<<endl;
+    cout<<"Write 2 To Enter Admin Menu"<<endl;
+    cout<<"Write 3 To Exit"<<endl;
+}
+void ShowStudentLogInMenu()
+{
+    system("clear");
+    cout << "===== Login Menu ====="<<endl;
+    cout<<"Write 1 To Login"<<endl;
+    cout<<"Write 2 To Sign Up"<<endl;
+    cout<<"Write 3 To Go Back"<<endl;
+}
+
+void ShowStudentMenu()
+{
+    system("clear");
+    cout << "===== Student Menu ====="<<endl;
+    cout << "Write 1 View Available Courses"<<endl;
+    cout << "Write 2 Enroll in Course"<<endl;
+    cout << "Write 3 Drop Course"<<endl;
+    cout << "Write 4 View My Courses"<<endl;
+    cout << "Write 5 View Grades"<<endl;
+    cout << "Write 6 Logout"<<endl;
+}
+
+void ShowAdminLogInMenu()
+{
+    system("clear");
+    cout << "===== Login Menu ====="<<endl;
+    cout<<"Write 1 To Login"<<endl;
+    cout<<"Write 2 To Go Back"<<endl;
+}
+
+void ShowAdminLogInMenu()
+{
+    system("clear");
+    cout << "===== Admin Menu ====="<<endl<<endl;
+    cout << "===== Admin Menu ====="<<endl;
+    cout << "Write 1 Add Admin Account"<<endl;
+    cout << "Write 2 Add New Course"<<endl;
+    cout << "Write 3 Delete Course"<<endl;
+    cout << "Write 4 View All Students"<<endl;
+    cout << "Write 5 View All Courses"<<endl;
+    cout << "Write 6 View All Courses Of A Student"<<endl;
+    cout << "Write 7 View All Students Of A Course"<<endl;
+    cout << "Write 8 Show Student Grade"<<endl;
+    cout << "Write 9 Change Student Grade"<<endl;
+    cout << "Write 10 to Logout "<<endl;
+}
+#pragma endregion
+
 #pragma region admin_functions
 // TODO: verify admin and show admin menu and takes current admin id by reference id an assign it to CurrentAdminId variable
-void LoginAdmin(int &current_admin_id)
+void LoginAdmin(int current_admin_id)
 {
 }
 
 // TODO: go back to the main menu and current admin id by reference id an assign it back to 0
-void LogoutAdmin(int &current_admin_id)
+void LogoutAdmin(int current_admin_id)
 {
 }
 
@@ -112,7 +168,7 @@ void ViewAllStudentsOfACourse(int course_id)
 }
 
 // TODO: display grades for the current student about a specific course
-void ShowGrades(int student_id , int course_id)
+void ShowGrade(int student_id , int course_id)
 {
 }
 
@@ -126,18 +182,15 @@ void ChangeGrade(int student_id , int course_id)
 #pragma region student_functions
 // TODO: verify student and show student menu
 // needs to take the current student id   by reference and assign it to CurrentStudentId variable 
-void LoginStudent(int &current_student_id)
+int LoginStudent(int current_student_id)
 {
+    
 }
 
-// TODO: return to main menu
-// needs to take the CurrentStudentId by reference and assign back to 0
-void LogoutStudent(int &current_student_id)
-{
-}
+
 
 // TODO: create a new student account and save it and make new empty array of id of Studentcourses and the NumberOfRegisteredCourses = 0
-void SignUpStudent(string name , string password , int level)
+int SignUpStudent(string name , string password , int level)
 {
 }
 
@@ -172,11 +225,40 @@ void ViewGrade(int current_student_id,int course_id)
 // TODO: read students from students.txt and increase the StudentCounter 
 void LoadStudents()
 {
+    ifstream file("students.txt");
+    if (!file.is_open())
+    {
+        cout<<"file could not be opened"<<endl;
+        return;
+    }
+    Student student;
+    while (file>>student.StudentId>>student.Name>>student.Password>>student.level>>student.NumberOfRegisteredCourses)
+    {
+        StudentArray[StudentCounter]=student;
+        StudentCounter++;
+    }
+    file.close();
 }
 
 // TODO: save students to students.txt
 void SaveStudents()
 {
+    ofstream file("student.txt");
+    if (!file.is_open())
+    {
+        cout<<"file could not be opened"<<endl;
+        return;
+    }
+    for (int i = 0 ; i < StudentCounter ; i++)
+    {
+        file << StudentArray[i].StudentId << " "
+             << StudentArray[i].Name << " "
+             << StudentArray[i].Password << " "
+             << StudentArray[i].level << " "
+             << StudentArray[i].NumberOfRegisteredCourses
+             << endl;
+    }
+    file.close();
 }
 
 // TODO: read courses from courses.txt and increase the CourseCounter 
@@ -213,6 +295,26 @@ void SaveStudentCourse()
 #pragma endregion
 
 #pragma region helper_functions
+
+// Ask for user chios
+int GetUserChios()
+{
+    int temp;
+    cin>>temp;
+}
+// Ask for user id
+int GetId()
+{
+    cout<<"write the id"<<endl;
+    int temp;
+    cin>>temp;
+}
+int GetCourseId()
+{
+    cout<<"write the course id"<<endl;
+    int temp;
+    cin>>temp;
+}
 // TODO: return index of student in StudentArray by ID
 int FindStudentIndexById(int student_id)
 {
@@ -242,6 +344,15 @@ bool IsStudentEnrolled(int student_id, int course_id)
 bool IsCourseFull(int course_index)
 {
 }
+// TODO: loop over the student array to find the student with the given id
+bool IsStudentExists(int student_id)
+{
+
+}
+bool IsAdminExists(int student_id)
+{
+
+}
 
 // TODO: generate next student ID and increase it after using it
 int ReturnNextStudentId()
@@ -257,14 +368,127 @@ int ReturnNextCourseId()
 
 #pragma endregion
 
+#pragma region main_functions // Student() and Admin() 
 
+void StudentLoginFunction()
+{
+    while (true)
+    {   ShowStudentLogInMenu();
+        int LogInMenuChios = GetUserChios();
+
+        switch (LogInMenuChios)
+        {
+        case 1:
+            int id = GetId();
+            CurrentStudentId = LoginStudent(id);
+            if (CurrentStudentId != -1)
+                StudentFunctions(CurrentStudentId);
+            else
+                cout<<"couldn't log in"<<endl;
+            break;
+        
+        case 2:
+            CurrentStudentId = SignUpStudent();
+            StudentFunctions(CurrentStudentId);
+            break;
+
+        case 3:
+            return;
+         default
+            cout<<"invalid choice"<<endl;
+        }
+    }
+    
+}
+
+//Functions بالجمع بها s
+void StudentFunctions(int current_student_id)
+{
+    while (true)
+    {
+        ShowStudentMenu();
+        int StudentChios = GetUserChios();
+
+        switch (StudentChios)
+        {
+        case 1:
+            ViewAvailableCourses(current_student_id);
+            break;
+        case 2:
+            {int course_id = GetCourseId();
+            EnrollToCourse(current_student_id,course_id);
+            break;}
+        case 3:
+            {int course_id = GetCourseId();
+            DropCourse(current_student_id,course_id);
+            break;}
+        case 4:
+            ViewMyCourses(current_student_id);
+            break;
+        case 5:
+            {int course_id = GetCourseId();
+            ViewGrade(current_student_id,course_id);
+            break;}
+        case 6:
+            return;
+        default
+            cout<<"invalid choice"<<endl;
+        }
+    }
+}
+
+void AdminLogInFunction()
+{
+
+}
+
+
+
+void AdminFunctions(int current_admin_id)
+{
+
+}
+
+#pragma endregion
 int main()
 {
     // TODO: load data from files
+    LoadStudents();
+    LoadCourses();
+    LoadAdmins();
+    LoadStudentCourse();
 
     // TODO: main menu
+    while (true)
+    {
+        ShowMainMenu();
+        int UserChios = GetUserChios();
+
+        switch (UserChios)
+        {
+        case 1:
+            // calls the StudentLoginFunction which in turn calls the student functions like enroll and view courses
+            StudentLoginFunction();
+            break;
+
+        case 2:
+            // calls the AdminLogInFunction which in turn calls the admin functions like add course and show student grade
+            AdminLogInFunction();
+            break;
+        
+        case 3:
+            return;
+         default
+            cout<<"invalid choice"<<endl;
+        }
+    }
+    
 
 
     // TODO: save data to files
+    SaveStudents();
+    SaveCourses();
+    SaveAdmins();
+    SaveStudentCourse();
     return 0;
 }
