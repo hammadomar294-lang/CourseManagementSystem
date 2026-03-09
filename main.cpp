@@ -104,7 +104,7 @@ void ShowAdminLogInMenu()
     cout<<"Write 2 To Go Back"<<endl;
 }
 
-void ShowAdminLogInMenu()
+void ShowAdminFunctionsMenu()
 {
     system("clear");
     cout << "===== Admin Menu ====="<<endl<<endl;
@@ -139,7 +139,7 @@ void AddAdmin(string name , string password)
 }
 
 // TODO: create a new course and add it to the system
-void AddCourse(string course_name , string instructor_name , int credit_hours , int max_capacity , int current_enrolled=0 , string day , string time)
+void AddCourse(string course_name , string instructor_name , int credit_hours , int max_capacity , int current_enrolled=0 , string day = "", string time="")
 {
 }
 
@@ -181,23 +181,49 @@ void ChangeGrade(int student_id , int course_id)
 #pragma endregion
 
 #pragma region student_functions
+
 // TODO: verify student and show student menu
-// needs to take the current student id   by reference and assign it to CurrentStudentId variable 
-int LoginStudent(int current_student_id)
+
+int LoginStudent(string name , string password)
 {
-    bool exists = IsStudentExists(current_student_id);
-    if (exists == true) 
-        return current_student_id;
-    else 
-        return -1;
+    int id = FindStudentIdByName(name);
+
+    if (id == -1)
+        {
+            cout<<"name was not found try again"<<endl;
+            return -1;
+        } 
+
+    int index = FindStudentIndexById(id);
+
+    if (StudentArray[index].Password == password)
+        return id;
+
+    return -1;
 
 }
 
 
 
-// TODO: create a new student account and save it and make new empty array of id of Studentcourses and the NumberOfRegisteredCourses = 0
+// TODO: create a new student object and save it to StudentArray
 int SignUpStudent(string name , string password , int level)
 {
+    int id = FindStudentIdByName(name);
+    if (id != -1) // if student name exist use another
+    {
+        cout<<"name allready used try again"<<endl;
+        return -1;
+    }
+    // make the student object
+    Student student;
+    student.StudentId = ReturnNextStudentId();
+    student.Name = name;
+    student.Password = password;
+    student.level = level;
+
+    // put the student object in the StudentArray
+    StudentArray[StudentCounter]=student;
+
 }
 
 // TODO: display all courses that still have available seats
@@ -394,6 +420,7 @@ int GetUserChios()
 {
     int temp;
     cin>>temp;
+    return temp;
 }
 // Ask for user id
 int GetId()
@@ -401,12 +428,14 @@ int GetId()
     cout<<"write the id"<<endl;
     int temp;
     cin>>temp;
+    return temp;
 }
 int GetCourseId()
 {
     cout<<"write the course id"<<endl;
     int temp;
     cin>>temp;
+    return temp;
 }
 // TODO: return index of student in StudentArray by ID
 int FindStudentIndexById(int student_id)
@@ -463,28 +492,12 @@ bool IsStudentEnrolled(int student_id, int course_id)
 bool IsCourseFull(int course_id)
 {
     int index = FindCourseIndexById(course_id);
-    if (CourseArray[index].CurrentEnrolled < CourseArray[index].MaxCapacity)
+    // if index == -1 that means the course does not exist 
+    if (index == -1) return true;
+    if (CourseArray[index].CurrentEnrolled >= CourseArray[index].MaxCapacity)
         return true;
     else 
         return false;
-}
-// TODO: loop over the student array to find the student with the given id
-bool IsStudentExists(int student_id)
-{
-    int index = FindStudentIndexById(student_id);
-    if (index == -1) 
-        return false;
-    else 
-        return true;
-
-}
-bool IsAdminExists(int admin_id)
-{
-    int index = FindAdminIndexById(admin_id);
-    if (index == -1) 
-        return false;
-    else
-        return true;
 }
 
 // set the global variable NextStudentId to the biggest (id in the StudentArray + 1)
@@ -506,7 +519,7 @@ void SetNextCourseId()
     {
         if (CourseArray[i].CourseId > TempBiggestCourseId) TempBiggestCourseId = CourseArray[i].CourseId;
     }
-    NextStudentId=TempBiggestCourseId + 1;
+    NextCourseId=TempBiggestCourseId + 1;
 }
 
 // TODO: generate next student ID and increase it after using it
@@ -520,41 +533,40 @@ int ReturnNextCourseId()
 {
     return NextCourseId++;
 }
+string AskForName()
+{
+    cout<<"write your name"<<endl;
+    string name;
+    cin>>name;
+    return name;
+}
+string AskForPassword()
+{
+    cout<<"write your password"<<endl;
+    string password;
+    cin>>password;
+    return password;
+}
+int AskForLevel()
+{
+    cout<<"write your level"<<endl;
+    int level;
+    cin>>level;
+    return level;
+}
+int FindStudentIdByName(string name)
+{
+    for (int i = 0 ; i < StudentCounter ; i++)
+    {
+        if (StudentArray[i].Name == name) 
+            return StudentArray[i].StudentId;
+    }
+    return -1;
+}
 
 #pragma endregion
 
 #pragma region main_functions // Student() and Admin() 
-
-void StudentLoginFunction()
-{
-    while (true)
-    {   ShowStudentLogInMenu();
-        int LogInMenuChios = GetUserChios();
-
-        switch (LogInMenuChios)
-        {
-        case 1:
-            int id = GetId();
-            CurrentStudentId = LoginStudent(id);
-            if (CurrentStudentId != -1)
-                StudentFunctions(CurrentStudentId);
-            else
-                cout<<"couldn't log in"<<endl;
-            break;
-        
-        case 2:
-            CurrentStudentId = SignUpStudent();
-            StudentFunctions(CurrentStudentId);
-            break;
-
-        case 3:
-            return;
-         default
-            cout<<"invalid choice"<<endl;
-        }
-    }
-    
-}
 
 //Functions بالجمع بها s
 void StudentFunctions(int current_student_id)
@@ -586,23 +598,65 @@ void StudentFunctions(int current_student_id)
             break;}
         case 6:
             return;
-        default
+        default:
             cout<<"invalid choice"<<endl;
         }
     }
 }
+
+void StudentLoginFunction()
+{
+    while (true)
+    {   ShowStudentLogInMenu();
+        int LogInMenuChios = GetUserChios();
+
+        switch (LogInMenuChios)
+        {
+        case 1:
+            {
+            string Name = AskForName();
+            string Password = AskForPassword();
+
+            CurrentStudentId = LoginStudent(Name,Password);
+            if (CurrentStudentId != -1)
+                StudentFunctions(CurrentStudentId);
+            else
+                cout<<"couldn't log in"<<endl;}
+            break;
+        
+        case 2:
+            {
+            string Name = AskForName();
+            string Password = AskForPassword();
+            int Level = AskForLevel();
+
+            CurrentStudentId = SignUpStudent(Name,Password,Level);
+            StudentFunctions(CurrentStudentId);
+            }
+            break;
+
+        case 3:
+            return;
+
+         default:
+            cout<<"invalid choice"<<endl;
+            break;
+        }
+    }
+    
+}
+
+void AdminFunctions(int current_admin_id)
+{
+
+}
+
 
 void AdminLogInFunction()
 {
 
 }
 
-
-
-void AdminFunctions(int current_admin_id)
-{
-
-}
 
 #pragma endregion
 int main()
@@ -613,8 +667,12 @@ int main()
     LoadAdmins();
     LoadStudentCourse();
 
+    // TODO: Set NextStudentId and NextCourseId to the next possible id 
+    SetNextStudentId();
+    SetNextCourseId();
     // TODO: main menu
-    while (true)
+    bool running = true ;
+    while (running)
     {
         ShowMainMenu();
         int UserChios = GetUserChios();
@@ -632,8 +690,9 @@ int main()
             break;
         
         case 3:
-            return;
-         default
+            running = false;
+            break;
+         default:
             cout<<"invalid choice"<<endl;
         }
     }
@@ -645,5 +704,6 @@ int main()
     SaveCourses();
     SaveAdmins();
     SaveStudentCourse();
+
     return 0;
 }
