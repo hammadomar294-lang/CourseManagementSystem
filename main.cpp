@@ -62,6 +62,7 @@ int StudentCourseCounter=0;
 
 int CurrentStudentId=0;
 int CurrentCourseId=0;
+int CurrentAdminId=0;
 
 #pragma endregion
 
@@ -84,10 +85,42 @@ void ShowStudentLogInMenu()
     cout<<"Write 3 To Go Back"<<endl;
 }
 
+// TODO: Show the current student name as a massage above the menu
+void ShowCurrentStudentName()
+{
+    string name;
+    int index = FindStudentIndexById(CurrentStudentId);
+    if (index == -1) 
+        name="User";
+    else 
+        name=StudentArray[index].Name;
+
+    cout<<" "<<endl;
+    cout<<"=================="<<endl;
+    cout<<name<<endl;
+    cout<<"=================="<<endl;
+}
+
+void ShowCurrentAdminName()
+{
+    string name;
+    int index = FindAdminIndexById(CurrentAdminId);
+    if (index == -1) 
+        name="User";
+    else 
+        name=AdminArray[index].Name;
+
+    cout<<" "<<endl;
+    cout<<"=================="<<endl;
+    cout<<name<<endl;
+    cout<<"=================="<<endl;
+}
+
 void ShowStudentMenu()
 {
     system("clear");
     cout << "===== Student Menu ====="<<endl;
+    cout << ShowCurrentStudentName()<<endl;
     cout << "Write 1 View Available Courses"<<endl;
     cout << "Write 2 Enroll in Course"<<endl;
     cout << "Write 3 Drop Course"<<endl;
@@ -107,8 +140,8 @@ void ShowAdminLogInMenu()
 void ShowAdminFunctionsMenu()
 {
     system("clear");
-    cout << "===== Admin Menu ====="<<endl<<endl;
     cout << "===== Admin Menu ====="<<endl;
+    cout << ShowCurrentAdminName()<<endl;
     cout << "Write 1 Add Admin Account"<<endl;
     cout << "Write 2 Add New Course"<<endl;
     cout << "Write 3 Delete Course"<<endl;
@@ -120,6 +153,7 @@ void ShowAdminFunctionsMenu()
     cout << "Write 9 Change Student Grade"<<endl;
     cout << "Write 10 to Logout "<<endl;
 }
+
 #pragma endregion
 
 #pragma region admin_functions
@@ -659,6 +693,7 @@ void AdminLogInFunction()
 
 
 #pragma endregion
+
 int main()
 {
     // TODO: load data from files
