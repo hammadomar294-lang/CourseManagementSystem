@@ -223,10 +223,10 @@ int LoginStudent(string name , string password)
     int id = FindStudentIdByName(name);
 
     if (id == -1)
-        {
-            cout<<"name was not found try again"<<endl;
-            return -1;
-        } 
+    {
+        cout<<"name was not found try again"<<endl;
+        return -1;
+    } 
 
     int index = FindStudentIndexById(id);
 
@@ -257,6 +257,7 @@ int SignUpStudent(string name , string password , int level)
 
     // put the student object in the StudentArray
     StudentArray[StudentCounter]=student;
+    StudentCounter++;
 
 }
 
