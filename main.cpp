@@ -706,6 +706,7 @@ int main()
     // TODO: Set NextStudentId and NextCourseId to the next possible id 
     SetNextStudentId();
     SetNextCourseId();
+    
     // TODO: main menu
     bool running = true ;
     while (running)
