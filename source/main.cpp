@@ -70,7 +70,7 @@ int CurrentAdminId=0;
 
 void ShowMainMenu()
 {
-    system("clear");
+    system("cls||clear");
     cout << "===== Main Menu ====="<<endl;
     cout<<"Write 1 To Enter Student Menu"<<endl;
     cout<<"Write 2 To Enter Admin Menu"<<endl;
@@ -78,7 +78,7 @@ void ShowMainMenu()
 }
 void ShowStudentLogInMenu()
 {
-    system("clear");
+    system("cls||clear");
     cout << "===== Login Menu ====="<<endl;
     cout<<"Write 1 To Login"<<endl;
     cout<<"Write 2 To Sign Up"<<endl;
@@ -118,9 +118,9 @@ void ShowCurrentAdminName()
 
 void ShowStudentMenu()
 {
-    system("clear");
+    system("cls||clear");
     cout << "===== Student Menu ====="<<endl;
-    cout << ShowCurrentStudentName()<<endl;
+    ShowCurrentStudentName();
     cout << "Write 1 View Available Courses"<<endl;
     cout << "Write 2 Enroll in Course"<<endl;
     cout << "Write 3 Drop Course"<<endl;
@@ -131,7 +131,7 @@ void ShowStudentMenu()
 
 void ShowAdminLogInMenu()
 {
-    system("clear");
+    system("cls||clear");
     cout << "===== Login Menu ====="<<endl;
     cout<<"Write 1 To Login"<<endl;
     cout<<"Write 2 To Go Back"<<endl;
@@ -139,9 +139,9 @@ void ShowAdminLogInMenu()
 
 void ShowAdminFunctionsMenu()
 {
-    system("clear");
+    system("cls||clear");
     cout << "===== Admin Menu ====="<<endl;
-    cout << ShowCurrentAdminName()<<endl;
+    ShowCurrentAdminName();
     cout << "Write 1 Add Admin Account"<<endl;
     cout << "Write 2 Add New Course"<<endl;
     cout << "Write 3 Delete Course"<<endl;
