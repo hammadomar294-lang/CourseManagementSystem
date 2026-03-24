@@ -232,8 +232,8 @@ int LoginStudent(string name , string password)
 
     if (StudentArray[index].Password == password)
         return id;
-
-    return -1;
+    else
+        return -1;
 
 }
 
@@ -242,7 +242,15 @@ int LoginStudent(string name , string password)
 // TODO: create a new student object and save it to StudentArray
 int SignUpStudent(string name , string password , int level)
 {
+    // to make sure there is a place before adding the student
+    if (StudentCounter >= 50)
+    {
+        cout<<"there is no empty place for you"<<endl;
+        return -1;
+    }
+
     int id = FindStudentIdByName(name);
+
     if (id != -1) // if student name exist use another
     {
         cout<<"name allready used try again"<<endl;
@@ -259,6 +267,7 @@ int SignUpStudent(string name , string password , int level)
     StudentArray[StudentCounter]=student;
     StudentCounter++;
 
+    return student.StudentId;
 }
 
 // TODO: display all courses that still have available seats
@@ -734,8 +743,6 @@ int main()
         }
     }
     
-
-
     // TODO: save data to files
     SaveStudents();
     SaveCourses();
