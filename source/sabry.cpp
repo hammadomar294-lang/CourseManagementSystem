@@ -12,3 +12,16 @@ void ViewAllCoursesOfAStudent(int student_id)
 void ViewAllStudentsOfACourse(int course_id)
 {
 }
+
+// both are optional 
+
+void AdminFunctions(int current_admin_id) // both are optional 
+{
+
+}
+
+
+void AdminLogInFunction()
+{
+
+}

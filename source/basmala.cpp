@@ -11,3 +11,16 @@ void DeleteCourse(int course_id)
 void ViewAllStudents()
 {
 }
+
+// both are optional 
+
+void AdminFunctions(int current_admin_id) // both are optional 
+{
+
+}
+
+
+void AdminLogInFunction()
+{
+
+}

@@ -12,3 +12,17 @@ void AddAdmin(string name , string password)
 void AddCourse(string course_name , string instructor_name , int credit_hours , int max_capacity , int current_enrolled=0 , string day = "", string time="")
 {
 }
+
+
+// both are optional 
+
+void AdminFunctions(int current_admin_id) // both are optional 
+{
+
+}
+
+
+void AdminLogInFunction()
+{
+
+}

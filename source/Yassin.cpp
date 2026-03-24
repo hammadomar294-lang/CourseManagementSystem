@@ -7,3 +7,16 @@ void ShowGrade(int student_id , int course_id)
 void ChangeGrade(int student_id , int course_id)
 {
 }
+
+// both are optional 
+
+void AdminFunctions(int current_admin_id) // both are optional 
+{
+
+}
+
+
+void AdminLogInFunction()
+{
+
+}

@@ -90,6 +90,19 @@ void ViewAvailableCourses()
     // cout the available courses
 }
 
+// both are optional 
+
+void AdminFunctions(int current_admin_id) // both are optional 
+{
+
+}
+
+
+void AdminLogInFunction()
+{
+
+}
+
 
 // TODO: remove a course from the student's registered courses
 void DropCourse(int current_student_id,int course_id)
