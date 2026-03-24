@@ -252,7 +252,7 @@ int SignUpStudent(string name , string password , int level)
     int id = FindStudentIdByName(name);
 
     if (id != -1) // if student name exist use another
-    {
+    {   
         cout<<"name allready used try again"<<endl;
         return -1;
     }
@@ -608,6 +608,26 @@ int FindStudentIdByName(string name)
     return -1;
 }
 
+void UpdateStudentArray(int deleteIndex)
+{
+    for (int i = deleteIndex; i < StudentCounter - 1; i++)
+    {
+        students[i] = students[i + 1];
+    }
+
+    StudentCounter--;
+}
+
+void UpdateCourseArray(int deleteIndex)
+{
+    for (int i = deleteIndex; i < CourseCounter - 1; i++)
+    {
+        CourseArray[i] = CourseArray[i + 1];
+    }
+
+    CourseCounter--;
+}
+
 #pragma endregion
 
 #pragma region main_functions // Student() and Admin() 
@@ -648,7 +668,7 @@ void StudentFunctions(int current_student_id)
     }
 }
 
-void StudentLoginFunction()
+void StudentLoginFunction() // StudentLoginFunction => StudentFunctions => any function view courses view grade 
 {
     while (true)
     {   ShowStudentLogInMenu();
