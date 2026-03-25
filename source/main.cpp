@@ -42,6 +42,91 @@ struct StudentCourse
 };
 #pragma endregion
 
+#pragma region functions declaration
+
+// ================= messages_functions =================
+void ShowMainMenu();
+void ShowStudentLogInMenu();
+void ShowCurrentStudentName();
+void ShowCurrentAdminName();
+void ShowStudentMenu();
+void ShowAdminLogInMenu();
+void ShowAdminFunctionsMenu();
+
+
+// ================= admin_functions =================
+void LoginAdmin(int current_admin_id);
+void LogoutAdmin(int current_admin_id);
+void AddAdmin(string name , string password);
+void AddCourse(string course_name , string instructor_name , int credit_hours ,
+               int max_capacity , int current_enrolled , string day , string time);
+void DeleteCourse(int course_id);
+void ViewAllStudents();
+void ViewAllCourses();
+void ViewAllCoursesOfAStudent(int student_id);
+void ViewAllStudentsOfACourse(int course_id);
+void ShowGrade(int student_id , int course_id);
+void ChangeGrade(int student_id , int course_id);
+
+
+// ================= student_functions =================
+int LoginStudent(string name , string password);
+int SignUpStudent(string name , string password , int level);
+void ViewAvailableCourses(int current_student_id);
+void EnrollToCourse(int current_student_id,int course_id);
+void DropCourse(int current_student_id,int course_id);
+void ViewMyCourses(int current_student_id);
+void ViewGrade(int current_student_id,int course_id);
+
+
+// ================= system_functions =================
+void LoadStudents();
+void SaveStudents();
+void LoadCourses();
+void SaveCourses();
+void LoadAdmins();
+void SaveAdmins();
+void LoadStudentCourse();
+void SaveStudentCourse();
+
+
+// ================= helper_functions =================
+int GetUserChios();
+int GetId();
+int GetCourseId();
+
+int FindStudentIndexById(int student_id);
+int FindCourseIndexById(int course_id);
+int FindAdminIndexById(int admin_id);
+int FindStudentCourseIndexById(int student_id, int course_id);
+
+bool IsStudentEnrolled(int student_id, int course_id);
+bool IsCourseFull(int course_id);
+
+void SetNextStudentId();
+void SetNextCourseId();
+
+int ReturnNextStudentId();
+int ReturnNextCourseId();
+
+string AskForName();
+string AskForPassword();
+int AskForLevel();
+
+int FindStudentIdByName(string name);
+
+void UpdateStudentArray(int deleteIndex);
+void UpdateCourseArray(int deleteIndex);
+
+
+// ================= main_functions =================
+void StudentFunctions(int current_student_id);
+void StudentLoginFunction();
+void AdminFunctions(int current_admin_id);
+void AdminLogInFunction();
+
+#pragma endregion
+
 #pragma region Global Variables and Arrays
 
 // ======== Arrays =========
@@ -173,7 +258,7 @@ void AddAdmin(string name , string password)
 }
 
 // TODO: create a new course and add it to the system
-void AddCourse(string course_name , string instructor_name , int credit_hours , int max_capacity , int current_enrolled=0 , string day = "", string time="")
+void AddCourse(string course_name , string instructor_name , int credit_hours , int max_capacity , int current_enrolled, string day , string time)
 {
 }
 
