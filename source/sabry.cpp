@@ -8,11 +8,6 @@ void ViewAllCoursesOfAStudent(int student_id)
 {
 }
 
-// TODO: show all students registered in a specific course
-void ViewAllStudentsOfACourse(int course_id)
-{
-}
-
 // both are optional 
 
 void AdminFunctions(int current_admin_id) // both are optional 

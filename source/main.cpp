@@ -612,7 +612,7 @@ void UpdateStudentArray(int deleteIndex)
 {
     for (int i = deleteIndex; i < StudentCounter - 1; i++)
     {
-        students[i] = students[i + 1];
+        StudentArray[i] = StudentArray[i + 1];
     }
 
     StudentCounter--;
