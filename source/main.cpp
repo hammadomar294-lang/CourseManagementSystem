@@ -133,7 +133,7 @@ void AdminLogInFunction();
 Student StudentArray[50];
 Course CourseArray[20];
 Admin AdminArray[3];
-StudentCourse StudentCourseArray[1000];
+StudentCourse StudentCourseArray[500];
 
 // ======== Variables ========
 int NextStudentId=0;
@@ -822,8 +822,7 @@ int main()
     SetNextCourseId();
     
     // TODO: main menu
-    bool running = true ;
-    while (running)
+    while (true)
     {
         ShowMainMenu();
         int UserChios = GetUserChios();
@@ -841,8 +840,7 @@ int main()
             break;
         
         case 3:
-            running = false;
-            break;
+            return 0;
          default:
             cout<<"invalid choice"<<endl;
         }
