@@ -1,16 +1,13 @@
-// TODO: verify admin and show admin menu and takes current admin id by reference id an assign it to CurrentAdminId variable
-void LoginAdmin(int current_admin_id)
-{
-}
-// TODO: remove an existing course
-void DeleteCourse(int course_id)
+// TODO: show all courses in the system
+void ViewAllCourses()
 {
 }
 
-// TODO: show all students in the system
-void ViewAllStudents()
+// TODO: display grades for the current student about a specific course
+void ShowGrade(int student_id , int course_id)
 {
 }
+
 
 // both are optional 
 

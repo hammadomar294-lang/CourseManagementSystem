@@ -1,12 +1,14 @@
-// TODO: display grades for the current student about a specific course
-void ShowGrade(int student_id , int course_id)
+
+// TODO: create a new admin account
+void AddAdmin(string name , string password)
 {
 }
 
-// TODO: modify a student's grade
-void ChangeGrade(int student_id , int course_id)
+// TODO: show all students in the system
+void ViewAllStudents()
 {
 }
+
 
 // both are optional 
 

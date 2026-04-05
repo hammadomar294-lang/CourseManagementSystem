@@ -1,15 +1,10 @@
-// TODO: display all courses the student is currently enrolled in
-void ViewMyCourses(int current_student_id)
+// TODO: show all courses a specific student is registered in
+void ViewAllCoursesOfAStudent(int student_id)
 {
 }
 
-// TODO: show grades for the student's courses | ال function دي محتاجة اذن
-void ViewGrade(int current_student_id,int course_id)
-{
-}
-
-// TODO: show all students registered in a specific course
-void ViewAllStudentsOfACourse(int course_id)
+// TODO: modify a student's grade
+void ChangeGrade(int student_id , int course_id)
 {
 }
 

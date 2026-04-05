@@ -1,10 +1,5 @@
-// TODO: show all courses in the system
-void ViewAllCourses()
-{
-}
-
-// TODO: show all courses a specific student is registered in
-void ViewAllCoursesOfAStudent(int student_id)
+// TODO: show grade for the student's course 
+void ViewGrade()
 {
 }
 

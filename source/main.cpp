@@ -5,7 +5,6 @@
 using namespace std;
 
 #pragma region Structs
-
 struct Student
 {
     int StudentId;
@@ -22,9 +21,9 @@ struct Course
     string InstructorName;
     int CreditHours;
     int MaxCapacity;
-    int CurrentEnrolled;
     string Day;
     string Time;
+    int CurrentEnrolled = 0;
 };
 
 struct Admin
@@ -55,28 +54,27 @@ void ShowAdminFunctionsMenu();
 
 
 // ================= admin_functions =================
-void LoginAdmin(int current_admin_id);
-void LogoutAdmin(int current_admin_id);
-void AddAdmin(string name , string password);
-void AddCourse(string course_name , string instructor_name , int credit_hours ,
-               int max_capacity , int current_enrolled , string day , string time);
-void DeleteCourse(int course_id);
+int LoginAdmin();
+void LogoutAdmin();
+void AddAdmin();
+void AddCourse();
+void DeleteCourse();
 void ViewAllStudents();
 void ViewAllCourses();
-void ViewAllCoursesOfAStudent(int student_id);
-void ViewAllStudentsOfACourse(int course_id);
-void ShowGrade(int student_id , int course_id);
-void ChangeGrade(int student_id , int course_id);
+void ViewAllCoursesOfAStudent();
+void ViewAllStudentsOfACourse();
+void ShowGrade();
+void ChangeGrade();
 
 
 // ================= student_functions =================
 int LoginStudent(string name , string password);
 int SignUpStudent(string name , string password , int level);
-void ViewAvailableCourses(int current_student_id);
-void EnrollToCourse(int current_student_id,int course_id);
-void DropCourse(int current_student_id,int course_id);
-void ViewMyCourses(int current_student_id);
-void ViewGrade(int current_student_id,int course_id);
+void ViewAvailableCourses();
+void EnrollToCourse();
+void DropCourse();
+void ViewMyCourses();
+void ViewGrade();
 
 
 // ================= system_functions =================
@@ -92,15 +90,18 @@ void SaveStudentCourse();
 
 // ================= helper_functions =================
 int GetUserChios();
-int GetId();
+int GetUserId();
 int GetCourseId();
+
+int FindStudentIdByName(string name);
+int FindCourseIdByName(string name);
 
 int FindStudentIndexById(int student_id);
 int FindCourseIndexById(int course_id);
 int FindAdminIndexById(int admin_id);
 int FindStudentCourseIndexById(int student_id, int course_id);
 
-bool IsStudentEnrolled(int student_id, int course_id);
+bool IsStudentEnrolled(int course_id);
 bool IsCourseFull(int course_id);
 
 void SetNextStudentId();
@@ -109,13 +110,12 @@ void SetNextCourseId();
 int ReturnNextStudentId();
 int ReturnNextCourseId();
 
+string AskForCourseName();
 string AskForName();
 string AskForPassword();
 int AskForLevel();
 
-int FindStudentIdByName(string name);
-
-void UpdateStudentArray(int deleteIndex);
+void UpdateStudentCourseArray(int deleteIndex);
 void UpdateCourseArray(int deleteIndex);
 
 
@@ -146,7 +146,6 @@ int StudentCourseCounter=0;
 
 
 int CurrentStudentId=0;
-int CurrentCourseId=0;
 int CurrentAdminId=0;
 
 #pragma endregion
@@ -247,24 +246,87 @@ void LoginAdmin(int current_admin_id)
 {
 }
 
-// TODO: go back to the main menu and current admin id by reference id an assign it back to 0
-void LogoutAdmin(int current_admin_id)
-{
-}
-
 // TODO: create a new admin account
 void AddAdmin(string name , string password)
 {
 }
 
 // TODO: create a new course and add it to the system
-void AddCourse(string course_name , string instructor_name , int credit_hours , int max_capacity , int current_enrolled, string day , string time)
+void AddCourse()
 {
+    if (CourseCounter >= 20)
+    {
+        cout<<"can't add any new courses"<<endl;
+        return;
+    }
+    string course_name , instructor_name , day , time;
+    int credit_hours , max_capacity;
+
+    course_name = AskForString("write course's name");
+    int id = FindCourseIdByName(course_name);
+    if (id != -1)
+    {
+        cout<<"course is allready registered"<<endl;
+        return;
+    }
+
+    instructor_name = AskForString("write instructor's name");
+    day = AskForString("what day is course on");
+    time = AskForString("what time is the course like ( xx/xx/xxxx )");
+
+    do 
+    {
+        credit_hours = AskForInt("write the credit hours");
+        if (credit_hours > 6 || credit_hours < 1)
+            cout<<"invalid number try again"<<endl;
+
+    } while (credit_hours > 6 || credit_hours < 1);
+    
+    do 
+    {
+        max_capacity = AskForInt("write the max capacity");
+        if (max_capacity > 60 || max_capacity <= 0)
+            cout<<"invalid number try again"<<endl;
+            
+    } while (max_capacity > 60 || max_capacity <= 0);
+    
+
+    Course course = {ReturnNextCourseId() , course_name , instructor_name , credit_hours , max_capacity , day , time};
+    CourseArray[CourseCounter++] = course;
+    cout<<"course added successfully"<<endl;
 }
 
 // TODO: remove an existing course
-void DeleteCourse(int course_id)
+void DeleteCourse()
 {
+    int course_id = GetCourseId();
+    if (course_id == -1)
+    {
+        cout<<"course was not found"<<endl;
+        return;
+    }
+    int course_index = FindCourseIndexById(course_id);
+    if (course_index == -1)
+    {
+        cout<<"data was corrupted"<<endl;
+        return;
+    }
+
+    int counter = 0 , student_index = 0;
+    for(int i = StudentCourseCounter - 1 ; i >= 0 ; i++)
+    {
+        if (StudentCourseArray[i].CourseId == course_id)
+        {
+            student_index = FindStudentIndexById(StudentCourseArray[i].StudentId);
+            UpdateStudentCourseArray(i);
+            StudentArray[student_index].NumberOfRegisteredCourses--;
+            counter++;
+        }
+    }
+    cout<<counter<<" relations was deleted"<<endl;
+
+    UpdateCourseArray(course_index);
+    cout<<"course was deleted"<<endl;
 }
 
 // TODO: show all students in the system
@@ -322,8 +384,6 @@ int LoginStudent(string name , string password)
 
 }
 
-
-
 // TODO: create a new student object and save it to StudentArray
 int SignUpStudent(string name , string password , int level)
 {
@@ -356,27 +416,99 @@ int SignUpStudent(string name , string password , int level)
 }
 
 // TODO: display all courses that still have available seats
-void ViewAvailableCourses(int current_student_id)
+void ViewAvailableCourses()
 {
 }
 
-// TODO: enroll the logged-in student in a course
-void EnrollToCourse(int current_student_id,int course_id)
+// TODO: enroll the logged-in uses the global variable CurrentStudentId student in a course
+void EnrollToCourse()
 {
+    if (StudentCourseCounter >= 500)
+    {
+        cout<<"can't accept any more student try again soon"<<endl;
+        return;
+    }
+
+    int student_index = FindStudentIndexById(CurrentStudentId);
+    if (student_index == -1)
+    {
+        cout<<"student was not found"<<endl;
+        return;
+    }
+
+    if (StudentArray[student_index].NumberOfRegisteredCourses >= 10) 
+    {
+        cout<<"Limit reached! You have 10 active courses"<<endl;
+        return;
+    }
+
+    int course_id = GetCourseId();
+    if (course_id == -1)
+    {
+        cout<<"course was not found try again"<<endl;
+        return;
+    }
+    
+    if (IsStudentEnrolled(course_id) == true)
+    {
+        cout<<"you are allready enrolled"<<endl;
+        return;
+    }
+    if (IsCourseFull(course_id) == true)
+    {
+        cout<<"course is reached try again next time"<<endl;
+        return;
+    }
+
+    int course_index = FindCourseIndexById(course_id);
+    if (course_id == -1)
+    {
+        cout<<"course data is corrupted"<<endl;
+        return;
+    }
+
+    StudentCourse student_course = {CurrentStudentId,course_id};
+    StudentCourseArray[StudentCourseCounter] = student_course;
+    StudentCourseCounter++;
+    StudentArray[student_index].NumberOfRegisteredCourses++;
+    CourseArray[course_index].CurrentEnrolled++;
 }
 
 // TODO: remove a course from the student's registered courses
-void DropCourse(int current_student_id,int course_id)
+void DropCourse()
 {
+    int course_id = GetCourseId();
+    if (course_id == -1)
+    {
+        cout<<"course was not found"<<endl;
+        return;
+    }
+
+    int student_course_index = FindStudentCourseIndexById(CurrentStudentId,course_id);
+    if (student_course_index == -1)
+    {
+        cout<<"you are not enrolled in this course"<<endl;
+        return;
+    }
+    
+    int student_index = FindStudentIndexById(CurrentStudentId);
+    int course_index = FindCourseIndexById(course_id);
+
+    StudentArray[student_index].NumberOfRegisteredCourses--;
+    CourseArray[course_index].CurrentEnrolled--;
+
+    UpdateStudentCourseArray(student_course_index);
+    
+    cout<<"course dropped successfully"<<endl;
 }
 
 // TODO: display all courses the student is currently enrolled in
-void ViewMyCourses(int current_student_id)
+void ViewMyCourses()
 {
 }
 
-// TODO: show grades for the student's courses | ال function دي محتاجة اذن
-void ViewGrade(int current_student_id,int course_id)
+// TODO: show grade for the student's course 
+void ViewGrade()
 {
 }
 #pragma endregion
@@ -547,24 +679,50 @@ void SaveStudentCourse()
 // Ask for user chios
 int GetUserChios()
 {
-    int temp;
-    cin>>temp;
-    return temp;
+    int chios;
+    cin>>chios;
+    return chios;
 }
-// Ask for user id
-int GetId()
+
+string AskForString(string msg)
 {
-    cout<<"write the id"<<endl;
-    int temp;
-    cin>>temp;
-    return temp;
+    cout<<msg<<endl;
+    string s;
+    cin.ignore();
+    getline(cin,s);
+    return s;
+}
+int AskForInt(string msg)
+{
+    cout<<msg<<endl;
+    int x;
+    cin>>x;
+    return x;
+}
+
+// Ask for user id
+int GetUserId()
+{
+    string name = AskForName();
+    int id = FindStudentIdByName(name);
+    if (id == -1)
+    {
+        cout<<"user name was not found try again"<<endl;
+        return -1;
+    }
+    return id;
 }
 int GetCourseId()
 {
-    cout<<"write the course id"<<endl;
-    int temp;
-    cin>>temp;
-    return temp;
+    string name = AskForCourseName();
+    int id = FindCourseIdByName(name);
+    if (id == -1)
+    {
+        cout<<"course was not found"<<endl;
+        return -1;
+    }
+    return id;
+
 }
 // TODO: return index of student in StudentArray by ID
 int FindStudentIndexById(int student_id)
@@ -582,6 +740,15 @@ int FindCourseIndexById(int course_id)
     for (int i = 0 ; i < CourseCounter ; i++)
     {
         if (CourseArray[i].CourseId == course_id) return i;
+    }
+    return -1;
+}
+
+int FindCourseIdByName(string name)
+{
+    for (int i = 0 ; i < CourseCounter ; i++)
+    {
+        if (CourseArray[i].Name == name) return CourseArray[i].CourseId;
     }
     return -1;
 }
@@ -606,12 +773,12 @@ int FindStudentCourseIndexById(int student_id, int course_id)
     return -1;
 }
 
-// TODO: check if student already registered in a course
-bool IsStudentEnrolled(int student_id, int course_id)
+// TODO: check if student already registered in a course this functions use the global variable CurrentStudentId
+bool IsStudentEnrolled(int course_id)
 {
     for (int i = 0 ; i < StudentCourseCounter; i++)
     {
-        if (StudentCourseArray[i].StudentId == student_id && StudentCourseArray[i].CourseId == course_id)
+        if (StudentCourseArray[i].StudentId == CurrentStudentId && StudentCourseArray[i].CourseId == course_id)
             return true;
     }
     return false;
@@ -662,18 +829,30 @@ int ReturnNextCourseId()
 {
     return NextCourseId++;
 }
+
+string AskForCourseName()
+{
+    cout<<"write course's name"<<endl;
+    string name;
+    cin.ignore();
+    getline(cin, name);
+    return name;
+}
+
 string AskForName()
 {
     cout<<"write your name"<<endl;
     string name;
-    cin>>name;
+    cin.ignore();
+    getline(cin, name);
     return name;
 }
 string AskForPassword()
 {
     cout<<"write your password"<<endl;
     string password;
-    cin>>password;
+    cin.ignore();
+    getline(cin, password);
     return password;
 }
 int AskForLevel()
@@ -692,15 +871,15 @@ int FindStudentIdByName(string name)
     }
     return -1;
 }
-
-void UpdateStudentArray(int deleteIndex)
+// to update the array which holds the relations between the student and the course when the student drops a course
+void UpdateStudentCourseArray(int deleteIndex)
 {
-    for (int i = deleteIndex; i < StudentCounter - 1; i++)
+    for (int i = deleteIndex; i < StudentCourseCounter - 1; i++)
     {
-        StudentArray[i] = StudentArray[i + 1];
+        StudentCourseArray[i] = StudentCourseArray[i + 1];
     }
 
-    StudentCounter--;
+    StudentCourseCounter--;
 }
 
 void UpdateCourseArray(int deleteIndex)
@@ -717,7 +896,7 @@ void UpdateCourseArray(int deleteIndex)
 
 #pragma region main_functions // Student() and Admin() 
 
-//Functions بالجمع بها s
+//Functions
 void StudentFunctions(int current_student_id)
 {
     while (true)
@@ -728,23 +907,20 @@ void StudentFunctions(int current_student_id)
         switch (StudentChios)
         {
         case 1:
-            ViewAvailableCourses(current_student_id);
+            ViewAvailableCourses();
             break;
         case 2:
-            {int course_id = GetCourseId();
-            EnrollToCourse(current_student_id,course_id);
-            break;}
+            EnrollToCourse();
+            break;
         case 3:
-            {int course_id = GetCourseId();
-            DropCourse(current_student_id,course_id);
-            break;}
+            DropCourse();
+            break;
         case 4:
-            ViewMyCourses(current_student_id);
+            ViewMyCourses();
             break;
         case 5:
-            {int course_id = GetCourseId();
-            ViewGrade(current_student_id,course_id);
-            break;}
+            ViewGrade();
+            break;
         case 6:
             return;
         default:
@@ -822,7 +998,8 @@ int main()
     SetNextCourseId();
     
     // TODO: main menu
-    while (true)
+    bool running = true;
+    while (running)
     {
         ShowMainMenu();
         int UserChios = GetUserChios();
@@ -840,7 +1017,8 @@ int main()
             break;
         
         case 3:
-            return 0;
+            running = false;
+            break;
          default:
             cout<<"invalid choice"<<endl;
         }
