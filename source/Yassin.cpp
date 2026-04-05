@@ -1,6 +1,6 @@
 
 // TODO: create a new admin account
-void AddAdmin(string name , string password)
+void AddAdmin()
 {
 }
 
@@ -12,7 +12,7 @@ void ViewAllStudents()
 
 // both are optional 
 
-void AdminFunctions(int current_admin_id) // both are optional 
+void AdminFunctions() // both are optional 
 {
 
 }

@@ -242,12 +242,12 @@ void ShowAdminFunctionsMenu()
 
 #pragma region admin_functions
 // TODO: verify admin and show admin menu and takes current admin id by reference id an assign it to CurrentAdminId variable
-void LoginAdmin(int current_admin_id)
+void LoginAdmin()
 {
 }
 
 // TODO: create a new admin account
-void AddAdmin(string name , string password)
+void AddAdmin()
 {
 }
 
@@ -340,22 +340,22 @@ void ViewAllCourses()
 }
 
 // TODO: show all courses a specific student is registered in
-void ViewAllCoursesOfAStudent(int student_id)
+void ViewAllCoursesOfAStudent()
 {
 }
 
 // TODO: show all students registered in a specific course
-void ViewAllStudentsOfACourse(int course_id)
+void ViewAllStudentsOfACourse()
 {
 }
 
 // TODO: display grades for the current student about a specific course
-void ShowGrade(int student_id , int course_id)
+void ShowGrade()
 {
 }
 
 // TODO: modify a student's grade
-void ChangeGrade(int student_id , int course_id)
+void ChangeGrade()
 {
 }
 
@@ -897,7 +897,7 @@ void UpdateCourseArray(int deleteIndex)
 #pragma region main_functions // Student() and Admin() 
 
 //Functions
-void StudentFunctions(int current_student_id)
+void StudentFunctions()
 {
     while (true)
     {
@@ -944,7 +944,7 @@ void StudentLoginFunction() // StudentLoginFunction => StudentFunctions => any f
 
             CurrentStudentId = LoginStudent(Name,Password);
             if (CurrentStudentId != -1)
-                StudentFunctions(CurrentStudentId);
+                StudentFunctions();
             else
                 cout<<"couldn't log in"<<endl;}
             break;
@@ -956,7 +956,7 @@ void StudentLoginFunction() // StudentLoginFunction => StudentFunctions => any f
             int Level = AskForLevel();
 
             CurrentStudentId = SignUpStudent(Name,Password,Level);
-            StudentFunctions(CurrentStudentId);
+            StudentFunctions();
             }
             break;
 
