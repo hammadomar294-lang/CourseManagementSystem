@@ -414,11 +414,26 @@ int SignUpStudent(string name , string password , int level)
 
     return student.StudentId;
 }
-
+// Done by amira
 // TODO: display all courses that still have available seats
 void ViewAvailableCourses()
-{
+{           
+   bool found = false;
+
+       for (int i = 0; i < CourseCounter; i++)
+       {
+           if (IsCourseFull(CourseArray[i].CourseId) == false && IsStudentEnrolled(CourseArray[i].CourseId) == false)
+           {
+
+               cout << "Name: " << CourseArray[i].Name << endl;
+
+               found = true;
+           }
+       }
+       if (!found)
+           cout << "No Available Courses" << endl; 
 }
+
 
 // TODO: enroll the logged-in uses the global variable CurrentStudentId student in a course
 void EnrollToCourse()
@@ -502,9 +517,29 @@ void DropCourse()
     cout<<"course dropped successfully"<<endl;
 }
 
+// Done by amira
 // TODO: display all courses the student is currently enrolled in
 void ViewMyCourses()
 {
+      bool found = false;
+
+        for (int i = 0; i < StudentCourseCounter; i++)
+        {
+            if (StudentCourseArray[i].StudentId == CurrentStudentId)
+            {
+                int courseIndex = FindCourseIndexById(StudentCourseArray[i].CourseId);
+                if (CourseIndex != -1)
+                {
+                    cout << "Name: " << CourseArray[CourseIndex].Name << endl;
+                 
+                    found = true;
+                }
+            }
+        }
+        if (!found)
+        {
+            cout << "You are not enrolled in any courses." << endl;
+        }
 }
 
 // TODO: show grade for the student's course 
