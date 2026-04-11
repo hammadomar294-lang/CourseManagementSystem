@@ -4,7 +4,8 @@ void ViewAllStudentsOfACourse()
 }
 
 // TODO: verify admin and show admin menu and takes current admin id by reference id an assign it to CurrentAdminId variable
-void LoginAdmin()
+// and returns -1 if name or password doesnot match
+int LoginAdmin(string name , string password)
 {
 }
 

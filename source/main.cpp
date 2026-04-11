@@ -41,92 +41,6 @@ struct StudentCourse
 };
 #pragma endregion
 
-#pragma region functions declaration
-
-// ================= messages_functions =================
-void ShowMainMenu();
-void ShowStudentLogInMenu();
-void ShowCurrentStudentName();
-void ShowCurrentAdminName();
-void ShowStudentMenu();
-void ShowAdminLogInMenu();
-void ShowAdminFunctionsMenu();
-
-
-// ================= admin_functions =================
-int LoginAdmin();
-void LogoutAdmin();
-void AddAdmin();
-void AddCourse();
-void DeleteCourse();
-void ViewAllStudents();
-void ViewAllCourses();
-void ViewAllCoursesOfAStudent();
-void ViewAllStudentsOfACourse();
-void ShowGrade();
-void ChangeGrade();
-
-
-// ================= student_functions =================
-int LoginStudent(string name , string password);
-int SignUpStudent(string name , string password , int level);
-void ViewAvailableCourses();
-void EnrollToCourse();
-void DropCourse();
-void ViewMyCourses();
-void ViewGrade();
-
-
-// ================= system_functions =================
-void LoadStudents();
-void SaveStudents();
-void LoadCourses();
-void SaveCourses();
-void LoadAdmins();
-void SaveAdmins();
-void LoadStudentCourse();
-void SaveStudentCourse();
-
-
-// ================= helper_functions =================
-int GetUserChios();
-int GetUserId();
-int GetCourseId();
-
-int FindStudentIdByName(string name);
-int FindCourseIdByName(string name);
-
-int FindStudentIndexById(int student_id);
-int FindCourseIndexById(int course_id);
-int FindAdminIndexById(int admin_id);
-int FindStudentCourseIndexById(int student_id, int course_id);
-
-bool IsStudentEnrolled(int course_id);
-bool IsCourseFull(int course_id);
-
-void SetNextStudentId();
-void SetNextCourseId();
-
-int ReturnNextStudentId();
-int ReturnNextCourseId();
-
-string AskForCourseName();
-string AskForName();
-string AskForPassword();
-int AskForLevel();
-
-void UpdateStudentCourseArray(int deleteIndex);
-void UpdateCourseArray(int deleteIndex);
-
-
-// ================= main_functions =================
-void StudentFunctions(int current_student_id);
-void StudentLoginFunction();
-void AdminFunctions(int current_admin_id);
-void AdminLogInFunction();
-
-#pragma endregion
-
 #pragma region Global Variables and Arrays
 
 // ======== Arrays =========
@@ -240,9 +154,229 @@ void ShowAdminFunctionsMenu()
 
 #pragma endregion
 
+#pragma region helper_functions // DONE
+
+// Ask for user chios
+int GetUserChios()
+{
+    int chios;
+    cin>>chios;
+    return chios;
+}
+
+string AskForString(string msg)
+{
+    cout<<msg<<endl;
+    string s;
+    cin.ignore();
+    getline(cin,s);
+    return s;
+}
+int AskForInt(string msg)
+{
+    cout<<msg<<endl;
+    int x;
+    cin>>x;
+    return x;
+}
+
+// Ask for user id
+int GetUserId()
+{
+    string name = AskForName();
+    int id = FindStudentIdByName(name);
+    if (id == -1)
+    {
+        cout<<"user name was not found try again"<<endl;
+        return -1;
+    }
+    return id;
+}
+int GetCourseId()
+{
+    string name = AskForCourseName();
+    int id = FindCourseIdByName(name);
+    if (id == -1)
+    {
+        cout<<"course was not found"<<endl;
+        return -1;
+    }
+    return id;
+
+}
+// TODO: return index of student in StudentArray by ID
+int FindStudentIndexById(int student_id)
+{
+    for (int i = 0 ; i < StudentCounter ; i++)
+    {
+        if (StudentArray[i].StudentId == student_id) return i;
+    }
+    return -1;
+}
+
+// TODO: return index of course in CourseArray by ID
+int FindCourseIndexById(int course_id)
+{
+    for (int i = 0 ; i < CourseCounter ; i++)
+    {
+        if (CourseArray[i].CourseId == course_id) return i;
+    }
+    return -1;
+}
+
+int FindCourseIdByName(string name)
+{
+    for (int i = 0 ; i < CourseCounter ; i++)
+    {
+        if (CourseArray[i].Name == name) return CourseArray[i].CourseId;
+    }
+    return -1;
+}
+
+// TODO: return index of admin in AdminArray by ID
+int FindAdminIndexById(int admin_id)
+{
+    for (int i = 0 ; i < AdminCounter ; i++)
+    {
+        if (AdminArray[i].AdminId == admin_id) return i;
+    }
+    return -1;
+}
+
+// TODO: return index of student course in StudentCourseArray by ID
+int FindStudentCourseIndexById(int student_id, int course_id)
+{
+    for (int i = 0 ; i < StudentCourseCounter ; i++)
+    {
+        if (StudentCourseArray[i].StudentId == student_id && StudentCourseArray[i].CourseId == course_id) return i;
+    }
+    return -1;
+}
+
+// TODO: check if student already registered in a course this functions use the global variable CurrentStudentId
+bool IsStudentEnrolled(int course_id)
+{
+    for (int i = 0 ; i < StudentCourseCounter; i++)
+    {
+        if (StudentCourseArray[i].StudentId == CurrentStudentId && StudentCourseArray[i].CourseId == course_id)
+            return true;
+    }
+    return false;
+}
+
+// TODO: check if course reached max capacity
+bool IsCourseFull(int course_id)
+{
+    int index = FindCourseIndexById(course_id);
+    // if index == -1 that means the course does not exist 
+    if (index == -1) return true;
+    if (CourseArray[index].CurrentEnrolled >= CourseArray[index].MaxCapacity)
+        return true;
+    else 
+        return false;
+}
+
+// set the global variable NextStudentId to the biggest (id in the StudentArray + 1)
+void SetNextStudentId()
+{
+    int TempBiggestStudentId = 0;
+    for (int i = 0 ; i < StudentCounter ; i++)
+    {
+        if (StudentArray[i].StudentId > TempBiggestStudentId) TempBiggestStudentId = StudentArray[i].StudentId;
+    }
+    NextStudentId=TempBiggestStudentId + 1;
+}
+
+// set the global variable NextCourseId to the biggest (id in the CourseArray + 1)
+void SetNextCourseId()
+{
+    int TempBiggestCourseId = 0;
+    for (int i = 0 ; i < CourseCounter ; i++)
+    {
+        if (CourseArray[i].CourseId > TempBiggestCourseId) TempBiggestCourseId = CourseArray[i].CourseId;
+    }
+    NextCourseId=TempBiggestCourseId + 1;
+}
+
+// TODO: generate next student ID and increase it after using it
+int ReturnNextStudentId()
+{
+    return NextStudentId++;
+}
+
+// TODO: generate next course ID and increase it after using it
+int ReturnNextCourseId()
+{
+    return NextCourseId++;
+}
+
+string AskForCourseName()
+{
+    cout<<"write course's name"<<endl;
+    string name;
+    cin.ignore();
+    getline(cin, name);
+    return name;
+}
+
+string AskForName()
+{
+    cout<<"write your name"<<endl;
+    string name;
+    cin.ignore();
+    getline(cin, name);
+    return name;
+}
+string AskForPassword()
+{
+    cout<<"write your password"<<endl;
+    string password;
+    cin.ignore();
+    getline(cin, password);
+    return password;
+}
+int AskForLevel()
+{
+    cout<<"write your level"<<endl;
+    int level;
+    cin>>level;
+    return level;
+}
+int FindStudentIdByName(string name)
+{
+    for (int i = 0 ; i < StudentCounter ; i++)
+    {
+        if (StudentArray[i].Name == name) 
+            return StudentArray[i].StudentId;
+    }
+    return -1;
+}
+// to update the array which holds the relations between the student and the course when the student drops a course
+void UpdateStudentCourseArray(int deleteIndex)
+{
+    for (int i = deleteIndex; i < StudentCourseCounter - 1; i++)
+    {
+        StudentCourseArray[i] = StudentCourseArray[i + 1];
+    }
+
+    StudentCourseCounter--;
+}
+
+void UpdateCourseArray(int deleteIndex)
+{
+    for (int i = deleteIndex; i < CourseCounter - 1; i++)
+    {
+        CourseArray[i] = CourseArray[i + 1];
+    }
+
+    CourseCounter--;
+}
+
+#pragma endregion
+
 #pragma region admin_functions
 // TODO: verify admin and show admin menu and takes current admin id by reference id an assign it to CurrentAdminId variable
-void LoginAdmin()
+int LoginAdmin(string name , string password)
 {
 }
 
@@ -528,9 +662,9 @@ void ViewMyCourses()
             if (StudentCourseArray[i].StudentId == CurrentStudentId)
             {
                 int courseIndex = FindCourseIndexById(StudentCourseArray[i].CourseId);
-                if (CourseIndex != -1)
+                if (courseIndex != -1)
                 {
-                    cout << "Name: " << CourseArray[CourseIndex].Name << endl;
+                    cout << "Name: " << CourseArray[courseIndex].Name << endl;
                  
                     found = true;
                 }
@@ -709,226 +843,6 @@ void SaveStudentCourse()
 
 #pragma endregion
 
-#pragma region helper_functions // DONE
-
-// Ask for user chios
-int GetUserChios()
-{
-    int chios;
-    cin>>chios;
-    return chios;
-}
-
-string AskForString(string msg)
-{
-    cout<<msg<<endl;
-    string s;
-    cin.ignore();
-    getline(cin,s);
-    return s;
-}
-int AskForInt(string msg)
-{
-    cout<<msg<<endl;
-    int x;
-    cin>>x;
-    return x;
-}
-
-// Ask for user id
-int GetUserId()
-{
-    string name = AskForName();
-    int id = FindStudentIdByName(name);
-    if (id == -1)
-    {
-        cout<<"user name was not found try again"<<endl;
-        return -1;
-    }
-    return id;
-}
-int GetCourseId()
-{
-    string name = AskForCourseName();
-    int id = FindCourseIdByName(name);
-    if (id == -1)
-    {
-        cout<<"course was not found"<<endl;
-        return -1;
-    }
-    return id;
-
-}
-// TODO: return index of student in StudentArray by ID
-int FindStudentIndexById(int student_id)
-{
-    for (int i = 0 ; i < StudentCounter ; i++)
-    {
-        if (StudentArray[i].StudentId == student_id) return i;
-    }
-    return -1;
-}
-
-// TODO: return index of course in CourseArray by ID
-int FindCourseIndexById(int course_id)
-{
-    for (int i = 0 ; i < CourseCounter ; i++)
-    {
-        if (CourseArray[i].CourseId == course_id) return i;
-    }
-    return -1;
-}
-
-int FindCourseIdByName(string name)
-{
-    for (int i = 0 ; i < CourseCounter ; i++)
-    {
-        if (CourseArray[i].Name == name) return CourseArray[i].CourseId;
-    }
-    return -1;
-}
-
-// TODO: return index of admin in AdminArray by ID
-int FindAdminIndexById(int admin_id)
-{
-    for (int i = 0 ; i < AdminCounter ; i++)
-    {
-        if (AdminArray[i].AdminId == admin_id) return i;
-    }
-    return -1;
-}
-
-// TODO: return index of student course in StudentCourseArray by ID
-int FindStudentCourseIndexById(int student_id, int course_id)
-{
-    for (int i = 0 ; i < StudentCourseCounter ; i++)
-    {
-        if (StudentCourseArray[i].StudentId == student_id && StudentCourseArray[i].CourseId == course_id) return i;
-    }
-    return -1;
-}
-
-// TODO: check if student already registered in a course this functions use the global variable CurrentStudentId
-bool IsStudentEnrolled(int course_id)
-{
-    for (int i = 0 ; i < StudentCourseCounter; i++)
-    {
-        if (StudentCourseArray[i].StudentId == CurrentStudentId && StudentCourseArray[i].CourseId == course_id)
-            return true;
-    }
-    return false;
-}
-
-// TODO: check if course reached max capacity
-bool IsCourseFull(int course_id)
-{
-    int index = FindCourseIndexById(course_id);
-    // if index == -1 that means the course does not exist 
-    if (index == -1) return true;
-    if (CourseArray[index].CurrentEnrolled >= CourseArray[index].MaxCapacity)
-        return true;
-    else 
-        return false;
-}
-
-// set the global variable NextStudentId to the biggest (id in the StudentArray + 1)
-void SetNextStudentId()
-{
-    int TempBiggestStudentId = 0;
-    for (int i = 0 ; i < StudentCounter ; i++)
-    {
-        if (StudentArray[i].StudentId > TempBiggestStudentId) TempBiggestStudentId = StudentArray[i].StudentId;
-    }
-    NextStudentId=TempBiggestStudentId + 1;
-}
-
-// set the global variable NextCourseId to the biggest (id in the CourseArray + 1)
-void SetNextCourseId()
-{
-    int TempBiggestCourseId = 0;
-    for (int i = 0 ; i < CourseCounter ; i++)
-    {
-        if (CourseArray[i].CourseId > TempBiggestCourseId) TempBiggestCourseId = CourseArray[i].CourseId;
-    }
-    NextCourseId=TempBiggestCourseId + 1;
-}
-
-// TODO: generate next student ID and increase it after using it
-int ReturnNextStudentId()
-{
-    return NextStudentId++;
-}
-
-// TODO: generate next course ID and increase it after using it
-int ReturnNextCourseId()
-{
-    return NextCourseId++;
-}
-
-string AskForCourseName()
-{
-    cout<<"write course's name"<<endl;
-    string name;
-    cin.ignore();
-    getline(cin, name);
-    return name;
-}
-
-string AskForName()
-{
-    cout<<"write your name"<<endl;
-    string name;
-    cin.ignore();
-    getline(cin, name);
-    return name;
-}
-string AskForPassword()
-{
-    cout<<"write your password"<<endl;
-    string password;
-    cin.ignore();
-    getline(cin, password);
-    return password;
-}
-int AskForLevel()
-{
-    cout<<"write your level"<<endl;
-    int level;
-    cin>>level;
-    return level;
-}
-int FindStudentIdByName(string name)
-{
-    for (int i = 0 ; i < StudentCounter ; i++)
-    {
-        if (StudentArray[i].Name == name) 
-            return StudentArray[i].StudentId;
-    }
-    return -1;
-}
-// to update the array which holds the relations between the student and the course when the student drops a course
-void UpdateStudentCourseArray(int deleteIndex)
-{
-    for (int i = deleteIndex; i < StudentCourseCounter - 1; i++)
-    {
-        StudentCourseArray[i] = StudentCourseArray[i + 1];
-    }
-
-    StudentCourseCounter--;
-}
-
-void UpdateCourseArray(int deleteIndex)
-{
-    for (int i = deleteIndex; i < CourseCounter - 1; i++)
-    {
-        CourseArray[i] = CourseArray[i + 1];
-    }
-
-    CourseCounter--;
-}
-
-#pragma endregion
-
 #pragma region main_functions // Student() and Admin() 
 
 //Functions
@@ -1006,17 +920,81 @@ void StudentLoginFunction() // StudentLoginFunction => StudentFunctions => any f
     
 }
 
-void AdminFunctions(int current_admin_id)
+void AdminFunctions()
 {
-
+    while (true)
+    {
+        int chios = GetUserChios();
+        switch (chios)
+        {
+        case 1:
+            AddAdmin();
+            break;
+        case 2:
+            AddCourse();
+            break;
+        case 3:
+            DeleteCourse();
+            break;
+        case 4:
+            ViewAllStudents();
+            break;
+        case 5:
+            ViewAllCourses();
+            break;
+        case 6:
+            ViewAllCoursesOfAStudent();
+            break;
+        case 7:
+            ViewAllStudentsOfACourse();
+            break;
+        case 8:
+            ShowGrade();
+            break;
+        case 9:
+            ChangeGrade();
+            break;
+        case 10:
+            return;
+        default:
+            cout<<"invalid chios"<<endl;
+            break;
+        }
+    }
 }
 
 
 void AdminLogInFunction()
 {
+    while (true)
+    {
+        ShowAdminLogInMenu();
+        int chios = GetUserChios();
 
+        switch (chios)
+        {
+        case 1:
+            {
+                string name = AskForString("enter user name");
+                string password = AskForString("enter you password");
+                int id = LoginAdmin(name,password);
+                if (id != -1)
+                {
+                    CurrentAdminId = id;
+                    AdminFunctions();
+                }
+                else
+                    cout<<"couldn't log in"<<endl;
+                break;
+            }
+        case 2 :
+            return;
+        default:
+            cout<<"invalid chios try again"<<endl;
+            break;
+        }
+    }
 }
-
 
 #pragma endregion
 
