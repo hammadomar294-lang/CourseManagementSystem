@@ -243,6 +243,15 @@ int FindAdminIndexById(int admin_id)
     return -1;
 }
 
+int FindAdminIdByName(string name)
+{
+    for (int i = 0 ; i < AdminCounter ; i++)
+    {
+        if (AdminArray[i].Name == name) return AdminArray[i].AdminId;
+    }
+    return -1;
+}
+
 // TODO: return index of student course in StudentCourseArray by ID
 int FindStudentCourseIndexById(int student_id, int course_id)
 {
@@ -375,10 +384,27 @@ void UpdateCourseArray(int deleteIndex)
 #pragma endregion
 
 #pragma region admin_functions
+
+// Done by abd_elrahman
 // TODO: verify admin and show admin menu and takes current admin id by reference id an assign it to CurrentAdminId variable
 int LoginAdmin(string name , string password)
 {
-}
+    int id = FindAdminIdByName(name);
+    if (id == -1)
+    {
+        cout<<"admin name was not found"<<endl;
+        return -1;
+    }
+    int index = FindAdminIndexById(id);
+    if (index == -1)
+        return -1;
+    if (AdminArray[index].Password != password)
+    {
+        cout<<"password is incorrect"<<endl;
+        return -1;
+    }
+    return id;
+}   
 
 // TODO: create a new admin account
 void AddAdmin()
@@ -478,9 +504,34 @@ void ViewAllCoursesOfAStudent()
 {
 }
 
+// Done by abd_elrahman
 // TODO: show all students registered in a specific course
 void ViewAllStudentsOfACourse()
 {
+    string course_name = AskForString("enter course name");
+    int course_id = FindCourseIdByName(course_name);
+    bool found = false;
+    if (course_id == -1)
+    {
+        cout<<"couldn't find course try again"<<endl;
+        return;
+    }
+    int index = 0;
+    for (int i = 0 ; i < StudentCourseCounter ; i++)
+    {
+        if (StudentCourseArray[i].CourseId == course_id)
+        {
+            index = FindStudentIndexById(StudentCourseArray[i].StudentId);
+            if (index != -1)
+            {
+                found = true;
+                cout<<StudentArray[index].Name<<endl;
+            }
+                
+        }
+    }
+    if (!found)
+        cout<<"No students enrolled in this course"<<endl;
 }
 
 // TODO: display grades for the current student about a specific course
