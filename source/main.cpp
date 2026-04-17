@@ -542,7 +542,7 @@ void DeleteCourse()
 }
 
 // TODO: show all students in the system
-//Done by Yasin
+// Done by yasin
 void ViewAllStudents()
 {
     // 1. Check if the system has any students
