@@ -65,96 +65,6 @@ int CurrentAdminId=0;
 
 #pragma endregion
 
-#pragma region masseges_functions
-
-void ShowMainMenu()
-{
-    system("cls||clear");
-    cout << "===== Main Menu ====="<<endl;
-    cout<<"Write 1 To Enter Student Menu"<<endl;
-    cout<<"Write 2 To Enter Admin Menu"<<endl;
-    cout<<"Write 3 To Exit"<<endl;
-}
-void ShowStudentLogInMenu()
-{
-    system("cls||clear");
-    cout << "===== Login Menu ====="<<endl;
-    cout<<"Write 1 To Login"<<endl;
-    cout<<"Write 2 To Sign Up"<<endl;
-    cout<<"Write 3 To Go Back"<<endl;
-}
-
-// TODO: Show the current student name as a massage above the menu
-void ShowCurrentStudentName()
-{
-    string name;
-    int index = FindStudentIndexById(CurrentStudentId);
-    if (index == -1) 
-        name="User";
-    else 
-        name=StudentArray[index].Name;
-
-    cout<<" "<<endl;
-    cout<<"=================="<<endl;
-    cout<<name<<endl;
-    cout<<"=================="<<endl;
-}
-
-void ShowCurrentAdminName()
-{
-    string name;
-    int index = FindAdminIndexById(CurrentAdminId);
-    if (index == -1) 
-        name="User";
-    else 
-        name=AdminArray[index].Name;
-
-    cout<<" "<<endl;
-    cout<<"=================="<<endl;
-    cout<<name<<endl;
-    cout<<"=================="<<endl;
-}
-
-void ShowStudentMenu()
-{
-    system("cls||clear");
-    cout << "===== Student Menu ====="<<endl;
-    ShowCurrentStudentName();
-    cout << "Write 1 View Available Courses"<<endl;
-    cout << "Write 2 Enroll in Course"<<endl;
-    cout << "Write 3 Drop Course"<<endl;
-    cout << "Write 4 View My Courses"<<endl;
-    cout << "Write 5 View Grades"<<endl;
-    cout << "Write 6 Logout"<<endl;
-}
-
-void ShowAdminLogInMenu()
-{
-    system("cls||clear");
-    cout << "===== Login Menu ====="<<endl;
-    cout<<"Write 1 To Login"<<endl;
-    cout<<"Write 2 To Go Back"<<endl;
-}
-
-void ShowAdminFunctionsMenu()
-{
-    system("cls||clear");
-    cout << "===== Admin Menu ====="<<endl;
-    ShowCurrentAdminName();
-    cout << "Write 1 Add Admin Account"<<endl;
-    cout << "Write 2 Add New Course"<<endl;
-    cout << "Write 3 Delete Course"<<endl;
-    cout << "Write 4 View All Students"<<endl;
-    cout << "Write 5 View All Courses"<<endl;
-    cout << "Write 6 View All Courses Of A Student"<<endl;
-    cout << "Write 7 View All Students Of A Course"<<endl;
-    cout << "Write 8 Show Student Grade"<<endl;
-    cout << "Write 9 Change Student Grade"<<endl;
-    cout << "Write 10 to Logout "<<endl;
-}
-
-#pragma endregion
-
 #pragma region helper_functions // DONE
 
 // Ask for user chios
@@ -169,7 +79,6 @@ string AskForString(string msg)
 {
     cout<<msg<<endl;
     string s;
-    cin.ignore();
     getline(cin,s);
     return s;
 }
@@ -339,7 +248,6 @@ string AskForCourseName()
 {
     cout<<"write course's name"<<endl;
     string name;
-    cin.ignore();
     getline(cin, name);
     return name;
 }
@@ -348,7 +256,6 @@ string AskForName()
 {
     cout<<"write your name"<<endl;
     string name;
-    cin.ignore();
     getline(cin, name);
     return name;
 }
@@ -356,7 +263,6 @@ string AskForPassword()
 {
     cout<<"write your password"<<endl;
     string password;
-    cin.ignore();
     getline(cin, password);
     return password;
 }
@@ -398,6 +304,98 @@ void UpdateCourseArray(int deleteIndex)
 }
 
 #pragma endregion
+
+#pragma region masseges_functions
+
+void ShowMainMenu()
+{
+    system("cls||clear");
+    cout << "===== Main Menu ====="<<endl;
+    cout<<"Write 1 To Enter Student Menu"<<endl;
+    cout<<"Write 2 To Enter Admin Menu"<<endl;
+    cout<<"Write 3 To Exit"<<endl;
+}
+void ShowStudentLogInMenu()
+{
+    system("cls||clear");
+    cout << "===== Login Menu ====="<<endl;
+    cout<<"Write 1 To Login"<<endl;
+    cout<<"Write 2 To Sign Up"<<endl;
+    cout<<"Write 3 To Go Back"<<endl;
+}
+
+// TODO: Show the current student name as a massage above the menu
+void ShowCurrentStudentName()
+{
+    string name;
+    int index = FindStudentIndexById(CurrentStudentId);
+    if (index == -1) 
+        name="User";
+    else 
+        name=StudentArray[index].Name;
+
+    cout<<" "<<endl;
+    cout<<"=================="<<endl;
+    cout<<name<<endl;
+    cout<<"=================="<<endl;
+}
+
+void ShowCurrentAdminName()
+{
+    string name;
+    int index = FindAdminIndexById(CurrentAdminId);
+    if (index == -1) 
+        name="User";
+    else 
+        name=AdminArray[index].Name;
+
+    cout<<" "<<endl;
+    cout<<"=================="<<endl;
+    cout<<name<<endl;
+    cout<<"=================="<<endl;
+}
+
+void ShowStudentMenu()
+{
+    system("cls||clear");
+    cout << "===== Student Menu ====="<<endl;
+    ShowCurrentStudentName();
+    cout << "Write 1 View Available Courses"<<endl;
+    cout << "Write 2 Enroll in Course"<<endl;
+    cout << "Write 3 Drop Course"<<endl;
+    cout << "Write 4 View My Courses"<<endl;
+    cout << "Write 5 View Grades"<<endl;
+    cout << "Write 6 Logout"<<endl;
+}
+
+void ShowAdminLogInMenu()
+{
+    system("cls||clear");
+    cout << "===== Login Menu ====="<<endl;
+    cout<<"Write 1 To Login"<<endl;
+    cout<<"Write 2 To Go Back"<<endl;
+}
+
+void ShowAdminFunctionsMenu()
+{
+    system("cls||clear");
+    cout << "===== Admin Menu ====="<<endl;
+    ShowCurrentAdminName();
+    cout << "Write 1 Add Admin Account"<<endl;
+    cout << "Write 2 Add New Course"<<endl;
+    cout << "Write 3 Delete Course"<<endl;
+    cout << "Write 4 View All Students"<<endl;
+    cout << "Write 5 View All Courses"<<endl;
+    cout << "Write 6 View All Courses Of A Student"<<endl;
+    cout << "Write 7 View All Students Of A Course"<<endl;
+    cout << "Write 8 Show Student Grade"<<endl;
+    cout << "Write 9 Change Student Grade"<<endl;
+    cout << "Write 10 to Logout "<<endl;
+}
+
+#pragma endregion
+
+
 
 #pragma region admin_functions
 
@@ -745,7 +743,7 @@ void EnrollToCourse()
     }
 
     int course_index = FindCourseIndexById(course_id);
-    if (course_id == -1)
+    if (course_index == -1)
     {
         cout<<"course data is corrupted"<<endl;
         return;
@@ -1144,6 +1142,7 @@ int main()
     // TODO: Set NextStudentId and NextCourseId to the next possible id 
     SetNextStudentId();
     SetNextCourseId();
+    SetNextAdminId();
     
     // TODO: main menu
     bool running = true;
