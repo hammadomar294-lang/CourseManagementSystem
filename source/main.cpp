@@ -642,11 +642,6 @@ void ViewAllStudentsOfACourse()
         cout<<"No students enrolled in this course"<<endl;
 }
 
-// TODO: display grades for the current student about a specific course
-void ShowGrade()
-{
-}
-
 // TODO: modify a student's grade
 void ChangeGrade()
 {
