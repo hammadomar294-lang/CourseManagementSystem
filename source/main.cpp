@@ -854,7 +854,7 @@ AskForString("Press any key to go back...");
 // TODO: read students from students.txt and increase the StudentCounter 
 void LoadStudents()
 {
-    ifstream file("students.txt");
+    ifstream file("data/students.txt");
     if (!file.is_open())
     {
         cout<<"file students.txt could not be opened"<<endl;
@@ -872,7 +872,7 @@ void LoadStudents()
 // TODO: save students to students.txt
 void SaveStudents()
 {
-    ofstream file("students.txt");
+    ofstream file("data/students.txt");
     if (!file.is_open())
     {
         cout<<"file students.txt could not be opened"<<endl;
@@ -893,7 +893,7 @@ void SaveStudents()
 // TODO: read courses from courses.txt and increase the CourseCounter 
 void LoadCourses()
 {
-    ifstream file("courses.txt");
+    ifstream file("data/courses.txt");
     if (!file.is_open())
     {
         cout<<"file courses.txt could not be opened"<<endl;
@@ -912,7 +912,7 @@ void LoadCourses()
 // TODO: save courses to courses.txt 
 void SaveCourses()
 {
-    ofstream file("courses.txt");
+    ofstream file("data/courses.txt");
     if (!file.is_open())
     {
         cout<<"file courses.txt could not be opened"<<endl;
@@ -936,7 +936,7 @@ void SaveCourses()
 // TODO: read admins from admins.txt and increase the AdminCounter 
 void LoadAdmins()
 {
-    ifstream file("admins.txt");
+    ifstream file("data/admins.txt");
     if (!file.is_open())
     {
         cout<<"file admins.txt could not be opened"<<endl;
@@ -954,7 +954,7 @@ void LoadAdmins()
 // TODO: save admins to admins.txt 
 void SaveAdmins()
 {
-    ofstream file("admins.txt");
+    ofstream file("data/admins.txt");
     if (!file.is_open())
     {
         cout<<"file admins.txt could not be opened"<<endl;
@@ -973,7 +973,7 @@ void SaveAdmins()
 // TODO: read StudentCourse from studentcourses.txt and increase the StudentCourseCounter 
 void LoadStudentCourse()
 {
-    ifstream file("studentcourses.txt");
+    ifstream file("data/studentcourses.txt");
     if (!file.is_open())
     {
         cout<<"file studentcourses.txt could not be opened"<<endl;
@@ -991,7 +991,7 @@ void LoadStudentCourse()
 // TODO: save StudentCourse from studentcourses.txt 
 void SaveStudentCourse()
 {
-    ofstream file("studentcourses.txt");
+    ofstream file("data/studentcourses.txt");
     if (!file.is_open())
     {
         cout<<"file studentcourses.txt could not be opened"<<endl;
