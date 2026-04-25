@@ -102,12 +102,12 @@ int FindStudentIdByName(string name)
     return -1;
 }
 
-// Ask for user chios
-int GetUserChios()
+// Ask for user choice
+int GetUserchoice()
 {
-    int chios;
-    cin>>chios;
-    return chios;
+    int choice;
+    cin>>choice;
+    return choice;
 }
 
 string AskForString(string msg)
@@ -119,10 +119,17 @@ string AskForString(string msg)
 }
 int AskForInt(string msg)
 {
-    cout<<msg<<endl;
+    cout << msg << endl;
+
     int x;
-    cin.ignore();
-    cin>>x;
+
+    while(!(cin >> x))
+    {
+        cin.clear();
+        cin.ignore(1000,'\n');
+        cout << "Invalid input. Try again:\n";
+    }
+
     return x;
 }
 
@@ -194,7 +201,10 @@ int FindStudentCourseIndexById(int student_id, int course_id)
 {
     for (int i = 0 ; i < StudentCourseCounter ; i++)
     {
-        if (StudentCourseArray[i].StudentId == student_id && StudentCourseArray[i].CourseId == course_id) return i;
+        if (StudentCourseArray[i].StudentId == student_id && StudentCourseArray[i].CourseId == course_id)
+        {
+            return i;
+        }
     }
     return -1;
 }
@@ -339,8 +349,7 @@ void ShowCurrentStudentName()
         name=StudentArray[index].Name;
 
     cout<<" "<<endl;
-    cout<<"=================="<<endl;
-    cout<<name<<endl;
+    cout<<"      "<<name<< "'s profile" <<endl;
     cout<<"=================="<<endl;
 }
 
@@ -354,8 +363,7 @@ void ShowCurrentAdminName()
         name=AdminArray[index].Name;
 
     cout<<" "<<endl;
-    cout<<"=================="<<endl;
-    cout<<name<<endl;
+    cout<<"current admin is "<<name<<endl;
     cout<<"=================="<<endl;
 }
 
@@ -409,6 +417,7 @@ int LoginAdmin(string name , string password)
     if (id == -1)
     {
         cout<<"admin name was not found"<<endl;
+        AskForInt("write 0 to go back");
         return -1;
     }
     int index = FindAdminIndexById(id);
@@ -417,6 +426,7 @@ int LoginAdmin(string name , string password)
     if (AdminArray[index].Password != password)
     {
         cout<<"password is incorrect"<<endl;
+        AskForInt("write 0 to go back");
         return -1;
     }
     return id;
@@ -430,6 +440,7 @@ void AddAdmin()
     if (AdminCounter >= 3)
     {
         cout << "Can't add any new admins. The system is full!" << endl;
+        AskForInt("write 0 to go back");
         return;
     }
 
@@ -473,22 +484,24 @@ void AddCourse()
     if (CourseCounter >= 20)
     {
         cout<<"can't add any new courses"<<endl;
+        AskForInt("write 0 to go back");
         return;
     }
     string course_name , instructor_name , day , time;
-    int credit_hours , max_capacity;
+    int credit_hours , max_capacity , current_enrolled;
 
     course_name = AskForString("write course's name");
     int id = FindCourseIdByName(course_name);
     if (id != -1)
     {
         cout<<"course is allready registered"<<endl;
+        AskForInt("write 0 to go back");
         return;
     }
 
     instructor_name = AskForString("write instructor's name");
     day = AskForString("what day is course on");
-    time = AskForString("what time is the course like ( xx/xx/xxxx )");
+    time = AskForString("what time is the course like (xx:xx) ");
 
     do 
     {
@@ -501,13 +514,20 @@ void AddCourse()
     do 
     {
         max_capacity = AskForInt("write the max capacity");
-        if (max_capacity > 60 || max_capacity <= 0)
+        if (max_capacity > 1000 || max_capacity <= 0)
             cout<<"invalid number try again"<<endl;
             
-    } while (max_capacity > 60 || max_capacity <= 0);
+    } while (max_capacity > 1000 || max_capacity <= 0);
     
+    do
+    {
+        current_enrolled = AskForInt("write the number student current enrolled ");
+        if (current_enrolled > max_capacity || current_enrolled < 0)
+            cout<<"invalid number try again"<<endl;
 
-    Course course = {ReturnNextCourseId() , course_name , instructor_name , credit_hours , max_capacity , day , time};
+    } while(current_enrolled > max_capacity || current_enrolled < 0);
+
+    Course course = {ReturnNextCourseId() , course_name , instructor_name , credit_hours , max_capacity , day , time , current_enrolled};
     CourseArray[CourseCounter++] = course;
     cout<<"course added successfully"<<endl;
     AskForInt("write 0 to go back");
@@ -517,34 +537,42 @@ void AddCourse()
 // TODO: remove an existing course
 void DeleteCourse()
 {
-    int course_id = GetCourseId();
+    string name = AskForString("write course's name");
+    int course_id = FindCourseIdByName(name);
     if (course_id == -1)
     {
         cout<<"course was not found"<<endl;
+        AskForInt("write 0 to go back");
         return;
     }
     int course_index = FindCourseIndexById(course_id);
     if (course_index == -1)
     {
         cout<<"data was corrupted"<<endl;
+        AskForInt("write 0 to go back");
         return;
     }
 
     int counter = 0 , student_index = 0;
-    for(int i = StudentCourseCounter - 1 ; i >= 0 ; i++)
+    for(int i = 0 ; i < StudentCourseCounter ;)
     {
         if (StudentCourseArray[i].CourseId == course_id)
         {
             student_index = FindStudentIndexById(StudentCourseArray[i].StudentId);
-            UpdateStudentCourseArray(i);
-            StudentArray[student_index].NumberOfRegisteredCourses--;
+            if (student_index != -1)
+                StudentArray[student_index].NumberOfRegisteredCourses--;
+            UpdateStudentCourseArray(i); // changes StudentCourseCounter so i made length
             counter++;
         }
+        else
+            {i++;}
     }
-    cout<<counter<<" relations was deleted"<<endl;
 
     UpdateCourseArray(course_index);
+
+    cout<<counter<<" relations was deleted"<<endl;
     cout<<"course was deleted"<<endl;
+
     AskForInt("write 0 to go back");
 }
 
@@ -619,13 +647,14 @@ AskForString("Press any key to go back...");
 void ViewAllCoursesOfAStudent()
 {
     // 1. Ask the admin for the student's name and get their ID
-    string name = AskForString("enter the name");
+    string name = AskForString("enter the student's name");
 
     // If the student doesn't exist, GetUserId will print an error and return -1
     int id = FindStudentIdByName(name);
     if (id == -1)
     {
         cout<<"student was not found"<<endl;
+        AskForInt("write 0 to go back");
         return;
     }
 
@@ -662,6 +691,38 @@ void ViewAllCoursesOfAStudent()
     } while (choice != 0);
 }
 
+void ViewStudentGrade()
+{
+    string student_name = AskForString("enter student name;");
+    int sId = FindStudentIdByName(student_name);
+    if (sId == -1)
+    {
+        cout<<"course was not found try again"<<endl;
+        AskForInt("write 0 to go back");
+        return;
+    }
+
+    string course_name=AskForString("Enter course name:");
+    int cId = FindCourseIdByName(course_name);
+    if (cId == -1)
+    {
+        cout<<"course was not found try again"<<endl;
+        AskForInt("write 0 to go back");
+        return;
+    }
+        
+    int index = FindStudentCourseIndexById ( sId , cId);
+
+    if(index !=-1)
+    {
+        cout<<"Grade: "<<StudentCourseArray[index].Grade<<endl;
+    }
+    else{
+        cout<<"Course not found or not registered!"<<endl;
+    }
+    AskForInt("write 0 to go back");
+}
+
 // Done by abd_elrahman
 // TODO: show all students registered in a specific course
 void ViewAllStudentsOfACourse()
@@ -672,6 +733,7 @@ void ViewAllStudentsOfACourse()
     if (course_id == -1)
     {
         cout<<"couldn't find course try again"<<endl;
+        AskForInt("Write 0 To Go Back: ");
         return;
     }
     int counter = 0;
@@ -762,8 +824,7 @@ void ChangeGrade()
 
     // 6. Update the grade in the array
     StudentCourseArray[studentCourseIndex].Grade = newGrade;
-    
-    cout << "Success: Grade has been updated to " << newGrade << "." << endl;
+    cout << "Success: Grade has been updated to " << newGrade << endl;
     AskForInt("Write 0 To Go Back: "); // Wait before clearing the screen
 }
 
@@ -795,6 +856,7 @@ int SignUpStudent(string name , string password , int level)
     if (StudentCounter >= 50)
     {
         cout<<"there is no empty place for you"<<endl;
+        AskForInt("write 0 to go back");
         return -1;
     }
 
@@ -803,6 +865,7 @@ int SignUpStudent(string name , string password , int level)
     if (id != -1) // if student name exist use another
     {   
         cout<<"name allready used try again"<<endl;
+        AskForInt("write 0 to go back");
         return -1;
     }
     // make the student object
@@ -965,14 +1028,18 @@ void ViewMyCourses()
 
 // TODO: show grade for the student's course 
 // Done by basmala
-void ShowGrade()
+void ViewMyGrade()
 {
-    string course=AskForString("Enter course name:");
+    string course_name=AskForString("Enter course name:");
 
-    int cId = FindCourseIdByName(course);
+    int cId = FindCourseIdByName(course_name);
     if (cId == -1)
+    {
         cout<<"course was not found try again"<<endl;
-
+        AskForInt("write 0 to go back");
+        return;
+    }
+        
     int index = FindStudentCourseIndexById ( CurrentStudentId , cId);
 
     if(index !=-1)
@@ -982,8 +1049,8 @@ void ShowGrade()
     else{
         cout<<"Course not found or not registered!"<<endl;
     }
-    AskForString("Press any key to go back...");
-    }
+    AskForInt("write 0 to go back");
+}
 #pragma endregion
 
 #pragma region system_functions // DONE
@@ -1155,9 +1222,9 @@ void StudentFunctions()
     while (true)
     {
         ShowStudentMenu();
-        int StudentChios = GetUserChios();
+        int Studentchoice = GetUserchoice();
 
-        switch (StudentChios)
+        switch (Studentchoice)
         {
         case 1:
             ViewAvailableCourses();
@@ -1172,7 +1239,7 @@ void StudentFunctions()
             ViewMyCourses();
             break;
         case 5:
-            ShowGrade();
+            ViewMyGrade();
             break;
         case 6:
             return;
@@ -1186,9 +1253,9 @@ void StudentLoginFunction() // StudentLoginFunction => StudentFunctions => any f
 {
     while (true)
     {   ShowStudentLogInMenu();
-        int LogInMenuChios = GetUserChios();
+        int LogInMenuchoice = GetUserchoice();
 
-        switch (LogInMenuChios)
+        switch (LogInMenuchoice)
         {
         case 1:
             {
@@ -1208,9 +1275,9 @@ void StudentLoginFunction() // StudentLoginFunction => StudentFunctions => any f
         
         case 2:
             {
-            string Name = AskForName();
-            string Password = AskForPassword();
-            int Level = AskForLevel();
+            string Name = AskForString("enter your name");
+            string Password = AskForString("enter your password");
+            int Level = AskForInt("enter your level");
 
             CurrentStudentId = SignUpStudent(Name,Password,Level);
             StudentFunctions();
@@ -1231,9 +1298,10 @@ void StudentLoginFunction() // StudentLoginFunction => StudentFunctions => any f
 void AdminFunctions()
 {
     while (true)
-    {
-        int chios = GetUserChios();
-        switch (chios)
+    {  
+        ShowAdminFunctionsMenu();
+        int choice = GetUserchoice();
+        switch (choice)
         {
         case 1:
             AddAdmin();
@@ -1257,7 +1325,7 @@ void AdminFunctions()
             ViewAllStudentsOfACourse();
             break;
         case 8:
-            ShowGrade();
+            ViewStudentGrade();
             break;
         case 9:
             ChangeGrade();
@@ -1265,7 +1333,7 @@ void AdminFunctions()
         case 10:
             return;
         default:
-            cout<<"invalid chios"<<endl;
+            cout<<"invalid choice"<<endl;
             break;
         }
     }
@@ -1277,14 +1345,15 @@ void AdminLogInFunction()
     while (true)
     {
         ShowAdminLogInMenu();
-        int chios = GetUserChios();
+        int choice = GetUserchoice();
 
-        switch (chios)
+        switch (choice)
         {
         case 1:
             {
                 string name = AskForString("enter user name");
                 string password = AskForString("enter you password");
+
                 int id = LoginAdmin(name,password);
                 if (id != -1)
                 {
@@ -1292,13 +1361,16 @@ void AdminLogInFunction()
                     AdminFunctions();
                 }
                 else
+                {
                     cout<<"couldn't log in"<<endl;
+                    AskForInt("write 0 to go back");
+                }
                 break;
             }
         case 2 :
             return;
         default:
-            cout<<"invalid chios try again"<<endl;
+            cout<<"invalid choice try again"<<endl;
             break;
         }
     }
@@ -1324,9 +1396,9 @@ int main()
     while (running)
     {
         ShowMainMenu();
-        int UserChios = GetUserChios();
+        int Userchoice = GetUserchoice();
 
-        switch (UserChios)
+        switch (Userchoice)
         {
         case 1:
             // calls the StudentLoginFunction which in turn calls the student functions like enroll and view courses
