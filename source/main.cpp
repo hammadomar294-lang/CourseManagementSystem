@@ -304,7 +304,7 @@ void UpdateStudentCourseArray(int deleteIndex)
         StudentCourseArray[i] = StudentCourseArray[i + 1];
     }
 
-    StudentCourseCounter--;
+    
 }
 
 void UpdateCourseArray(int deleteIndex)
@@ -314,7 +314,7 @@ void UpdateCourseArray(int deleteIndex)
         CourseArray[i] = CourseArray[i + 1];
     }
 
-    CourseCounter--;
+    
 }
 
 #pragma endregion
@@ -323,7 +323,7 @@ void UpdateCourseArray(int deleteIndex)
 
 void ShowMainMenu()
 {
-    system("cls||clear");
+    system("clear");
     cout << "===== Main Menu ====="<<endl;
     cout<<"Write 1 To Enter Student Menu"<<endl;
     cout<<"Write 2 To Enter Admin Menu"<<endl;
@@ -331,7 +331,7 @@ void ShowMainMenu()
 }
 void ShowStudentLogInMenu()
 {
-    system("cls||clear");
+    system("clear");
     cout << "===== Login Menu ====="<<endl;
     cout<<"Write 1 To Login"<<endl;
     cout<<"Write 2 To Sign Up"<<endl;
@@ -369,7 +369,7 @@ void ShowCurrentAdminName()
 
 void ShowStudentMenu()
 {
-    system("cls||clear");
+    system("clear");
     cout << "===== Student Menu ====="<<endl;
     ShowCurrentStudentName();
     cout << "Write 1 View Available Courses"<<endl;
@@ -382,7 +382,7 @@ void ShowStudentMenu()
 
 void ShowAdminLogInMenu()
 {
-    system("cls||clear");
+    system("clear");
     cout << "===== Login Menu ====="<<endl;
     cout<<"Write 1 To Login"<<endl;
     cout<<"Write 2 To Go Back"<<endl;
@@ -390,7 +390,7 @@ void ShowAdminLogInMenu()
 
 void ShowAdminFunctionsMenu()
 {
-    system("cls||clear");
+    system("clear");
     cout << "===== Admin Menu ====="<<endl;
     ShowCurrentAdminName();
     cout << "Write 1 Add Admin Account"<<endl;
@@ -569,7 +569,8 @@ void DeleteCourse()
     }
 
     UpdateCourseArray(course_index);
-
+    CourseCounter--;
+    
     cout<<counter<<" relations was deleted"<<endl;
     cout<<"course was deleted"<<endl;
 
@@ -594,7 +595,7 @@ void ViewAllStudents()
     do
     {
         // Clear screen for a clean view
-        system("cls||clear"); 
+        system("clear"); 
 
         cout << "===== Enrolled Students List =====" << endl;
 
@@ -661,7 +662,7 @@ void ViewAllCoursesOfAStudent()
     int choice;
     do 
     {
-        system("cls||clear");
+        system("clear");
         cout << "===== Registered Courses =====" << endl;
         int counter = 0;
 
@@ -993,10 +994,9 @@ void DropCourse()
 
     StudentArray[student_index].NumberOfRegisteredCourses--;
     CourseArray[course_index].CurrentEnrolled--;
-    StudentCourseCounter--;
-
-    UpdateStudentCourseArray(student_course_index);
     
+    UpdateStudentCourseArray(student_course_index);
+    StudentCourseCounter--;
     cout<<"course dropped successfully"<<endl;
     AskForInt("enter 0 to go back");
 }
