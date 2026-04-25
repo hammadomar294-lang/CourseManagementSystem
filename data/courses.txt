@@ -1,0 +1,3 @@
+0 sp Maryam_Nabil 3 400 303 sunday 10:am 
+1 calculus Soad_Bakry 3 400 252 monday 12:pm 
+2 electronics Hafez_Seliem 4 500 350 friday 2:pm 

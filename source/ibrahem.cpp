@@ -2,7 +2,8 @@
 void ViewAllCoursesOfAStudent()
 {
     // 1. Ask the admin for the student's name and get their ID
-    int targetStudentId = GetUserId(); 
+    string name = AskForString("enter the name");
+    int id = 
     
     // If the student doesn't exist, GetUserId will print an error and return -1
     if (targetStudentId == -1) 

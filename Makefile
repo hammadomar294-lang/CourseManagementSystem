@@ -1,5 +1,4 @@
 app:
 	g++ -std=c++17 source/main.cpp -o main
-
 run:
 	./main
