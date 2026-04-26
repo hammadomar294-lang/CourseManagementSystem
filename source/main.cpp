@@ -325,17 +325,17 @@ void ShowMainMenu()
 {
     system("clear");
     cout << "===== Main Menu ====="<<endl;
-    cout<<"Write 1 To Enter Student Menu"<<endl;
-    cout<<"Write 2 To Enter Admin Menu"<<endl;
-    cout<<"Write 3 To Exit"<<endl;
+    cout<<"1. Enter Student Menu"<<endl;
+    cout<<"2. Enter Admin Menu"<<endl;
+    cout<<"3. Exit"<<endl;
 }
 void ShowStudentLogInMenu()
 {
     system("clear");
     cout << "===== Login Menu ====="<<endl;
-    cout<<"Write 1 To Login"<<endl;
-    cout<<"Write 2 To Sign Up"<<endl;
-    cout<<"Write 3 To Go Back"<<endl;
+    cout<<"1. Login"<<endl;
+    cout<<"2. Sign Up"<<endl;
+    cout<<"3. Go Back"<<endl;
 }
 
 // TODO: Show the current student name as a massage above the menu
@@ -349,7 +349,7 @@ void ShowCurrentStudentName()
         name=StudentArray[index].Name;
 
     cout<<" "<<endl;
-    cout<<"      "<<name<< "'s profile" <<endl;
+    cout<<"     "<<name<< "'s profile" <<endl;
     cout<<"=================="<<endl;
 }
 
@@ -372,20 +372,20 @@ void ShowStudentMenu()
     system("clear");
     cout << "===== Student Menu ====="<<endl;
     ShowCurrentStudentName();
-    cout << "Write 1 View Available Courses"<<endl;
-    cout << "Write 2 Enroll in Course"<<endl;
-    cout << "Write 3 Drop Course"<<endl;
-    cout << "Write 4 View My Courses"<<endl;
-    cout << "Write 5 View Grades"<<endl;
-    cout << "Write 6 Logout"<<endl;
+    cout << "1. View Available Courses"<<endl;
+    cout << "2. Enroll in Course"<<endl;
+    cout << "3. Drop Course"<<endl;
+    cout << "4. View My Courses"<<endl;
+    cout << "5. View Grades"<<endl;
+    cout << "6. Logout"<<endl;
 }
 
 void ShowAdminLogInMenu()
 {
     system("clear");
     cout << "===== Login Menu ====="<<endl;
-    cout<<"Write 1 To Login"<<endl;
-    cout<<"Write 2 To Go Back"<<endl;
+    cout<<"1. Login"<<endl;
+    cout<<"2. Go Back"<<endl;
 }
 
 void ShowAdminFunctionsMenu()
@@ -393,16 +393,16 @@ void ShowAdminFunctionsMenu()
     system("clear");
     cout << "===== Admin Menu ====="<<endl;
     ShowCurrentAdminName();
-    cout << "Write 1 Add Admin Account"<<endl;
-    cout << "Write 2 Add New Course"<<endl;
-    cout << "Write 3 Delete Course"<<endl;
-    cout << "Write 4 View All Students"<<endl;
-    cout << "Write 5 View All Courses"<<endl;
-    cout << "Write 6 View All Courses Of A Student"<<endl;
-    cout << "Write 7 View All Students Of A Course"<<endl;
-    cout << "Write 8 Show Student Grade"<<endl;
-    cout << "Write 9 Change Student Grade"<<endl;
-    cout << "Write 10 to Logout "<<endl;
+    cout << "1. Add Admin Account"<<endl;
+    cout << "2. Add New Course"<<endl;
+    cout << "3. Delete Course"<<endl;
+    cout << "4. View All Students"<<endl;
+    cout << "5. View All Courses"<<endl;
+    cout << "6. View All Courses Of A Student"<<endl;
+    cout << "7. View All Students Of A Course"<<endl;
+    cout << "8. Show Student Grade"<<endl;
+    cout << "9. Change Student Grade"<<endl;
+   cout << "10. Logout "<<endl;
 }
 
 #pragma endregion
@@ -570,7 +570,7 @@ void DeleteCourse()
 
     UpdateCourseArray(course_index);
     CourseCounter--;
-    
+
     cout<<counter<<" relations was deleted"<<endl;
     cout<<"course was deleted"<<endl;
 
