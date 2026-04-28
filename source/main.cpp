@@ -69,7 +69,7 @@ int CurrentAdminId=0;
 
 void WaitForUser()
 {
-    cout << "\nPress Enter to continue...";
+    cout << "\nPress any key to continue...";
     cin.ignore();
     cin.get();
 }
@@ -304,7 +304,6 @@ void UpdateStudentCourseArray(int deleteIndex)
     {
         StudentCourseArray[i] = StudentCourseArray[i + 1];
     }
-
     
 }
 
@@ -562,7 +561,8 @@ void DeleteCourse()
             student_index = FindStudentIndexById(StudentCourseArray[i].StudentId);
             if (student_index != -1)
                 StudentArray[student_index].NumberOfRegisteredCourses--;
-            UpdateStudentCourseArray(i); // changes StudentCourseCounter so i made length
+            UpdateStudentCourseArray(i); 
+            StudentCourseCounter--;
             counter++;
         }
         else
@@ -913,7 +913,7 @@ void EnrollToCourse()
     if (StudentCourseCounter >= 500)
     {
         cout<<"can't accept any more student try again soon"<<endl;
-        AskForString("write 0 to go back");
+        WaitForUser();
         return;
     }
 
@@ -921,14 +921,14 @@ void EnrollToCourse()
     if (student_index == -1)
     {
         cout<<"student was not found"<<endl;
-        AskForString("write 0 to go back");
+        WaitForUser();
         return;
     }
 
     if (StudentArray[student_index].NumberOfRegisteredCourses >= 10) 
     {
         cout<<"Limit reached! You have 10 active courses"<<endl;
-        AskForString("write 0 to go back");
+        WaitForUser();
         return;
     }
     string course_name = AskForString("enter course name");
@@ -936,20 +936,20 @@ void EnrollToCourse()
     if (course_id == -1)
     {
         cout<<"course was not found try again"<<endl;
-        AskForString("write 0 to go back");
+        WaitForUser();
         return;
     }
     
     if (IsStudentEnrolled(course_id) == true)
     {
         cout<<"you are allready enrolled"<<endl;
-        AskForString("write 0 to go back");
+        WaitForUser();
         return;
     }
     if (IsCourseFull(course_id) == true)
     {
         cout<<"course is reached try again next time"<<endl;
-        AskForString("write 0 to go back");
+        WaitForUser();
         return;
     }
 
@@ -957,7 +957,7 @@ void EnrollToCourse()
     if (course_index == -1)
     {
         cout<<"course data is corrupted"<<endl;
-        AskForString("write 0 to go back");
+        WaitForUser();
         return;
     }
 
@@ -1361,11 +1361,7 @@ void AdminLogInFunction()
                     CurrentAdminId = id;
                     AdminFunctions();
                 }
-                else
-                {
-                    cout<<"couldn't log in"<<endl;
-                    WaitForUser();
-                }
+                
                 break;
             }
         case 2 :
