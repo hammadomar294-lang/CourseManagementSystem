@@ -152,7 +152,7 @@ int AskForInt(string msg)
     {
         cin.clear();
         cin.ignore(1000,'\n');
-        cout << "Invalid input. Try again:\n";
+        cout << "Invalid input. Try entering a number:\n";
     }
 
     return x;
@@ -323,7 +323,7 @@ void UpdateCourseArray(int deleteIndex)
 
 void ShowMainMenu()
 {
-    system("clear");
+    system("cls||clear");
     cout << "===== Main Menu ====="<<endl;
     cout<<"1. Student Menu"<<endl;
     cout<<"2. Admin Menu"<<endl;
@@ -331,7 +331,7 @@ void ShowMainMenu()
 }
 void ShowStudentLogInMenu()
 {
-    system("clear");
+    system("cls||clear");
     cout << "===== Login Menu ====="<<endl;
     cout<<"1. Login"<<endl;
     cout<<"2. Sign Up"<<endl;
@@ -369,20 +369,19 @@ void ShowCurrentAdminName()
 
 void ShowStudentMenu()
 {
-    system("clear");
+    system("cls||clear");
     cout << "===== Student Menu ====="<<endl;
     ShowCurrentStudentName();
     cout << "1. View Available Courses"<<endl;
     cout << "2. Enroll in Course"<<endl;
     cout << "3. Drop Course"<<endl;
     cout << "4. View My Courses"<<endl;
-    cout << "5. View Grades"<<endl;
-    cout << "6. Logout"<<endl;
+    cout << "5. Logout"<<endl;
 }
 
 void ShowAdminLogInMenu()
 {
-    system("clear");
+    system("cls||clear");
     cout << "===== Login Menu ====="<<endl;
     cout<<"1. Login"<<endl;
     cout<<"2. Go Back"<<endl;
@@ -390,7 +389,7 @@ void ShowAdminLogInMenu()
 
 void ShowAdminFunctionsMenu()
 {
-    system("clear");
+    system("cls||clear");
     cout << "===== Admin Menu ====="<<endl;
     ShowCurrentAdminName();
     cout << "1. Add Admin Account"<<endl;
@@ -501,7 +500,7 @@ void AddCourse()
 
     instructor_name = AskForString("write instructor's name");
     day = AskForString("what day is course on");
-    time = AskForString("what time is the course like (xx:xx) ");
+    time = AskForString("what time is the course like (xx:xx:pm/am) ");
 
     do 
     {
@@ -521,7 +520,7 @@ void AddCourse()
     
     do
     {
-        current_enrolled = AskForInt("write the number student current enrolled ");
+        current_enrolled = AskForInt("write the number of students currently enrolled ");
         if (current_enrolled > max_capacity || current_enrolled < 0)
             cout<<"invalid number try again"<<endl;
 
@@ -596,7 +595,7 @@ void ViewAllStudents()
     do
     {
         // Clear screen for a clean view
-        system("clear"); 
+        system("cls||clear");
 
         cout << "===== Enrolled Students List =====" << endl;
 
@@ -663,7 +662,7 @@ void ViewAllCoursesOfAStudent()
     int choice;
     do 
     {
-        system("clear");
+        system("cls||clear");
         cout << "===== Registered Courses =====" << endl;
         int counter = 0;
 
@@ -1015,7 +1014,7 @@ void ViewMyCourses()
                 int courseIndex = FindCourseIndexById(StudentCourseArray[i].CourseId);
                 if (courseIndex != -1)
                 {
-                    cout << "Name: " << CourseArray[courseIndex].Name << endl;
+                    cout << "Name: " << CourseArray[courseIndex].Name << " \t Grade: " << StudentCourseArray[i].Grade << endl;
                     counter++;
                 }
             }
@@ -1240,9 +1239,6 @@ void StudentFunctions()
             ViewMyCourses();
             break;
         case 5:
-            ViewMyGrade();
-            break;
-        case 6:
             return;
         default:
             cout<<"invalid choice"<<endl;
@@ -1278,7 +1274,15 @@ void StudentLoginFunction() // StudentLoginFunction => StudentFunctions => any f
             {
             string Name = AskForString("enter your name");
             string Password = AskForString("enter your password");
-            int Level = AskForInt("enter your level");
+            int Level;
+            do
+            {
+                Level = AskForInt("enter your level");
+                if (Level <= 0 || Level > 4)
+                    cout<<"enter a valid level between 1 and 4"<<endl;
+            } while (Level <= 0 || Level > 4);
+            
+            
 
             CurrentStudentId = SignUpStudent(Name,Password,Level);
             StudentFunctions();
