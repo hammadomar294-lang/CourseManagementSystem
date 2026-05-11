@@ -1,5 +1,5 @@
 // TODO: show grade for the student's course 
-void ViewGrade()
+void ViewMyGrade()
 {
 }
 

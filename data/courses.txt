@@ -1,7 +1,7 @@
 2 electronics Hafez_Seliem 4 500 354 friday 2:pm 
-3 genatics temp 3 500 5 sunday 4:pm 
-4 sp test 3 700 347 monday 5:pm 
-5 physics2 test 3 690 356 sunday 4:pm 
+4 sp test 3 700 348 monday 5:pm 
+5 physics2 test 3 690 357 sunday 4:pm 
 8 business temp 2 700 234 sunday 2:00 
 9 ethics temp 4 345 233 starday 4:00 
-10 calculus temp 4 600 356 monday 3:30:pm 
+10 calculus temp 4 600 357 monday 3:30:pm 
+11 test test 3 500 200 sunday time 

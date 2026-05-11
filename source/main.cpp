@@ -313,8 +313,13 @@ void UpdateCourseArray(int deleteIndex)
     {
         CourseArray[i] = CourseArray[i + 1];
     }
-
-    
+}
+void UpdateStudentArray(int deleteIndex)
+{
+    for (int i = deleteIndex; i < CourseCounter - 1; i++)
+    {
+        CourseArray[i] = CourseArray[i + 1];
+    }
 }
 
 #pragma endregion
@@ -397,11 +402,10 @@ void ShowAdminFunctionsMenu()
     cout << "3. Delete Course"<<endl;
     cout << "4. View All Students"<<endl;
     cout << "5. View All Courses"<<endl;
-    cout << "6. View All Courses Of A Student"<<endl;
-    cout << "7. View All Students Of A Course"<<endl;
-    cout << "8. Show Student Grade"<<endl;
-    cout << "9. Change Student Grade"<<endl;
-   cout << "10. Logout "<<endl;
+    cout << "6. View All Courses Of a Student"<<endl;
+    cout << "7. View All Students Of a Course"<<endl;
+    cout << "8. Change Student Grade"<<endl;
+   cout << "9. Logout "<<endl;
 }
 
 #pragma endregion
@@ -675,8 +679,7 @@ void ViewAllCoursesOfAStudent()
                 
                 if (courseIndex != -1) 
                 {
-                    cout << "  Course Name : " << CourseArray[courseIndex].Name << endl;
-                    cout << "  Instructor  : " << CourseArray[courseIndex].InstructorName << endl;
+                    cout << "  Course Name : " << CourseArray[courseIndex].Name << "  Grade: " << StudentCourseArray[i].Grade <<endl;
                     cout << "------------------------------" << endl;
                     counter++;
                 }
@@ -691,14 +694,14 @@ void ViewAllCoursesOfAStudent()
         choice = AskForInt("Write 0 To Go Back: ");
     } while (choice != 0);
 }
-
+// DONE by sabry
 void ViewStudentGrade()
 {
     string student_name = AskForString("enter student name;");
     int sId = FindStudentIdByName(student_name);
     if (sId == -1)
     {
-        cout<<"course was not found try again"<<endl;
+        cout<<"student was not found try again"<<endl;
         WaitForUser();
         return;
     }
@@ -739,6 +742,9 @@ void ViewAllStudentsOfACourse()
     }
     int counter = 0;
     int index = 0;
+    int display_counter = 1;
+    system("cls||clear");
+    cout<<"======== Students ========="<<endl;
     for (int i = 0 ; i < StudentCourseCounter ; i++)
     {
         if (StudentCourseArray[i].CourseId == course_id)
@@ -747,7 +753,7 @@ void ViewAllStudentsOfACourse()
             if (index != -1)
             {
                 counter++;
-                cout<<StudentArray[index].Name<<endl;
+                cout<<display_counter++<< ". " <<StudentArray[index].Name<< "  Grade: " << StudentCourseArray[i].Grade <<endl;
             }
                 
         }
@@ -833,6 +839,7 @@ void ChangeGrade()
 
 #pragma region student_functions
 
+
 // TODO: verify student and show student menu
 int LoginStudent(string name , string password)
 {
@@ -905,6 +912,24 @@ void ViewAvailableCourses()
        WaitForUser();
 }
 
+void ViewCoursesToEnroll()
+{
+    int counter = 0;
+        cout<<"====== Courses ======"<<endl;
+        for (int i = 0; i < CourseCounter; i++)
+        {
+           if (IsCourseFull(CourseArray[i].CourseId) == false && IsStudentEnrolled(CourseArray[i].CourseId) == false)
+           {
+
+                cout <<CourseArray[i].Name << endl;
+                counter++;
+           }
+        }
+        cout<<endl;
+        if (counter == 0)
+            cout << "No Available Courses" << endl; 
+}
+
 // TODO: enroll the logged-in uses the global variable CurrentStudentId student in a course
 void EnrollToCourse()
 {
@@ -930,6 +955,9 @@ void EnrollToCourse()
         WaitForUser();
         return;
     }
+    
+    ViewCoursesToEnroll();
+
     string course_name = AskForString("enter course name");
     int course_id = FindCourseIdByName(course_name);
     if (course_id == -1)
@@ -965,13 +993,35 @@ void EnrollToCourse()
     StudentCourseCounter++;
     StudentArray[student_index].NumberOfRegisteredCourses++;
     CourseArray[course_index].CurrentEnrolled++;
-    cout<<"courses was added to your courses successfully"<<endl;
+    cout<<" \n courses was added to your courses successfully"<<endl;
     WaitForUser();
+}
+
+void ViewCoursesToDrop()
+{
+    int counter = 0;
+        cout<<"===== Courses ====="<<endl;
+        for (int i = 0; i < StudentCourseCounter; i++)
+        {
+            if (StudentCourseArray[i].StudentId == CurrentStudentId)
+            {
+                int courseIndex = FindCourseIndexById(StudentCourseArray[i].CourseId);
+                if (courseIndex != -1)
+                {
+                    cout << CourseArray[courseIndex].Name << " \t Grade: " << StudentCourseArray[i].Grade << endl;
+                    counter++;
+                }
+            }
+        }
+        if (counter == 0)
+            cout << "You are not enrolled in any courses." << endl;
+        
 }
 
 // TODO: remove a course from the student's registered courses
 void DropCourse()
 {
+    ViewCoursesToDrop();
     string course_name = AskForString("enter course name");
     int course_id = FindCourseIdByName(course_name);
     if (course_id == -1)
@@ -1241,7 +1291,11 @@ void StudentFunctions()
         case 5:
             return;
         default:
-            cout<<"invalid choice"<<endl;
+            {
+                cout<<"invalid choice"<<endl;
+                WaitForUser();
+            }
+
         }
     }
 }
@@ -1285,7 +1339,8 @@ void StudentLoginFunction() // StudentLoginFunction => StudentFunctions => any f
             
 
             CurrentStudentId = SignUpStudent(Name,Password,Level);
-            StudentFunctions();
+            if (CurrentStudentId != -1)
+                StudentFunctions();
             }
             break;
 
@@ -1293,8 +1348,11 @@ void StudentLoginFunction() // StudentLoginFunction => StudentFunctions => any f
             return;
 
          default:
+         {
             cout<<"invalid choice"<<endl;
+            WaitForUser();
             break;
+         }
         }
     }
     
@@ -1330,12 +1388,9 @@ void AdminFunctions()
             ViewAllStudentsOfACourse();
             break;
         case 8:
-            ViewStudentGrade();
-            break;
-        case 9:
             ChangeGrade();
             break;
-        case 10:
+        case 9:
             return;
         default:
             cout<<"invalid choice"<<endl;
@@ -1371,8 +1426,12 @@ void AdminLogInFunction()
         case 2 :
             return;
         default:
-            cout<<"invalid choice try again"<<endl;
-            break;
+            {
+                cout<<"invalid choice try again"<<endl;
+                WaitForUser();
+                break;
+            }
+            
         }
     }
 }
@@ -1416,6 +1475,7 @@ int main()
             break;
          default:
             cout<<"invalid choice"<<endl;
+            WaitForUser();
         }
     }
     
